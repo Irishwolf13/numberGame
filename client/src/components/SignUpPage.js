@@ -14,18 +14,25 @@ export default function SignUpPage() {
       await createUserWithEmailAndPassword(auth, email, password);
       navigate('/home'); // Navigate to home page upon successful sign-up
     } catch (err) {
-      if (err.code === 'auth/email-already-in-use') {
-        setBadInfo('The email address is already in use.');
-      } else if (err.code === 'auth/invalid-email') {
-        setBadInfo('The email address is not valid.');
-      } else if (err.code === 'auth/missing-password') {
-        setBadInfo('You must have a password.');
-      } else if (err.code ==='auth/missing-email') {
-        setBadInfo('The email address is not valid.');
-      } else if (err.code === 'auth/weak-password'){
-        setBadInfo('Passwords must be at least 6 characters.')
-      } else {
-        setBadInfo('Something went wrong.')
+      switch (err.code) {
+        case 'auth/email-already-in-use':
+          setBadInfo('The email address is already in use.');
+          break;
+        case 'auth/invalid-email':
+          setBadInfo('The email address is not valid.');
+          break;
+        case 'auth/missing-password':
+          setBadInfo('You must have a password.');
+          break;
+        case 'auth/missing-email':
+          setBadInfo('The email address is not valid.');
+          break;
+        case 'auth/weak-password':
+          setBadInfo('Passwords must be at least 6 characters.');
+          break;
+        default:
+          setBadInfo('Something went wrong.');
+          break;
       }
       // console.error(err);
     }
@@ -45,7 +52,7 @@ export default function SignUpPage() {
     <div className='mainContainer'>
       <div className='otherContainer'>
         <div>
-          <div><input placeholder='Email...' onChange={(e) => setEmail(e.target.value)}></input></div>
+          <div><input autoFocus placeholder='Email...' onChange={(e) => setEmail(e.target.value)}></input></div>
           <div><input placeholder='Password...' type='password' onChange={(e) => setPassword(e.target.value)}></input></div>
           {badInfo && <div className='invalid'>{badInfo}</div>}
         </div>

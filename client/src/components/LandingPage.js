@@ -12,9 +12,11 @@ export default function LandingPage() {
   }
 
   return (
-    <div>
-      <button onClick={handleSignUp}>Sign up</button>
-      <button onClick={handleLogIn}>Log In</button>
+    <div className='mainContainer'>
+      <div className='otherContainer'>
+        <button onClick={handleSignUp}>Sign up</button>
+        <button onClick={handleLogIn}>Log In</button>
+      </div>
     </div>
   )
 }

@@ -34,7 +34,7 @@ export default function LogInPage() {
   return (
     <div className='mainContainer'>
       <div className='otherContainer'>
-        <div><input placeholder='Email...' onChange={(e) => setEmail(e.target.value)}></input></div>
+        <div><input autoFocus placeholder='Email...' onChange={(e) => setEmail(e.target.value)}></input></div>
         <div><input placeholder='Password...' type='password' onChange={(e) => setPassword(e.target.value)}></input></div>
         {badInfo && <div className='invalid spacing'>Invalid email or password.</div>}
         <div className='spacing'>

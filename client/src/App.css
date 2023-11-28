@@ -1,6 +1,12 @@
 .App {
   text-align: center;
 }
+.loading-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Full viewport height */
+}
 .spacing {
   margin-bottom: 1vh;
 }
@@ -15,5 +21,5 @@
 }
 
 .otherContainer {
-  margin-top: 15%; /* Pushes the container down */
+  margin-top: 25vh; /* Pushes the container down */
 }
