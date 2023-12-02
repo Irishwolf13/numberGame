@@ -4,6 +4,7 @@ import HomePage from "./components/HomePage";
 import LogInPage from "./components/LogInPage";
 import SignUpPage from "./components/SignUpPage";
 import LandingPage from "./components/LandingPage";
+import CreateCharacter from "./components/CreateCharacter";
 import NavBar from "./components/NavBar";
 import { auth } from "./config/firebase";
 import "./App.css";
@@ -30,6 +31,7 @@ function App() {
       {isAuthenticated && <NavBar />}
       <Routes>
         <Route path="/home" element={isAuthenticated ? <HomePage /> : <Navigate to="/login" replace />} />
+        <Route path="/createCharacter" element={isAuthenticated ? <CreateCharacter /> : <Navigate to="/login" replace />} />
         <Route path="/login" element={!isAuthenticated ? <LogInPage /> : <Navigate to="/home" replace />} />
         <Route path="/signup" element={!isAuthenticated ? <SignUpPage /> : <Navigate to="/home" replace />} />
         <Route path="/" element={!isAuthenticated ? <LandingPage /> : <Navigate to="/home" replace />} />

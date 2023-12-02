@@ -14,14 +14,20 @@ export default function NavBar() {
       console.error(err);
     }
   }
-  const handleGoHome = () => {
-    navigate('/home');
+  const handleGoHome = () => {navigate('/home');}
+  const handleCreateCharacter = () => {
+    console.log('iran')
+    navigate('/createCharacter');
   }
 
   return (
-    <div>
+    <div className='navBar'>
       <button onClick={handleGoHome}>Home page</button>
+      <button onClick={handleCreateCharacter}>Create Character</button>
+      <button>Select Character</button>
+      <button>Other</button>
       <button onClick={handleLogOut}>Log Out</button>
+      {/* {auth.currentUser.email} */}
     </div>
   )
 }

@@ -13,7 +13,9 @@
 .invalid {
   color: red;
 }
-
+.navBar {
+  text-align: left;
+}
 .mainContainer {
   display: flex; /* Enable flex layout */
   justify-content: center; /* Center horizontally */
