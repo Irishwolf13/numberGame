@@ -1,47 +1,28 @@
 import React, { useState } from 'react';
 import { auth } from '../config/firebase.js'
 import { useNavigate } from 'react-router-dom';
+import SpellSlinger from './SpellSlinger.js';
 
 export default function CreateCharacter() {
-  const [myType, setMyType] = useState('');
+  const [myHunterType, setMyHunterType] = useState('');
   const [myName, setMyName] = useState('');
   const [myGender, setMyGender] = useState('');
-  const [myGear, setMyGear] = useState('');
-  const [myFeature, setMyFeature] = useState('');
 
   // This is going to be arrays for now, but I think we want to get this information from the backend later
-  const allCharacters = [
-    "The Chosen",
-    "The Crooked",
-    "The Divine",
-    "The Expert",
-    "The Flake",
-    "The Initiate",
-    "The Monstrous",
-    "The Mundane",
-    "The Professional",
-    "The Spell-Slinger",
-    "The Spooky",
-    "The Wronged"
-  ];
-  const allGear = ["Rumpled clothes", "Stylish clothes", "Goth clothes", "Old Fashioned clothes"]
-  const allFeatures = ["Shadowed eyes", "Fierce eyes", "Weary eyes", "Sparkling eyes"]
   const allGenders = ["Woman", "Man", "Androgynous", "Other"]
+  const allHunters = [
+    "The Chosen","The Crooked","The Divine","The Expert","The Flake","The Initiate","The Monstrous",
+    "The Mundane","The Professional","The Spell-Slinger","The Spooky","The Wronged"];
   // End temp information
 
   const handleDropDownChange = (event, mySetter) => {
+    console.log(myHunterType)
     mySetter(event.target.value);
   };
   const handleCharacterNameChange = (event) => {
     setMyName(event.target.value);
   };
-  const handleGearChange = (event) => {
-    setMyGear(event.target.value);
-  };
 
-  const handleFeatureChange = (event) => {
-    setMyFeature(event.target.value);
-  };
   return (
     <div>
       <div>
@@ -59,31 +40,14 @@ export default function CreateCharacter() {
       </div>
       <div>
         <label htmlFor="dropdown">Select an option:  </label>
-        <select id="dropdown" value={myType} onChange={(e) => handleDropDownChange(e, setMyType)}>
-          <option value="" disabled>Character Type</option>
-          {allCharacters.map((type, index) => (
+        <select id="dropdown" value={myHunterType} onChange={(e) => handleDropDownChange(e, setMyHunterType)}>
+          <option value="" disabled>Hunter Type</option>
+          {allHunters.map((type, index) => (
             <option key={index + 1} value={index + 1}>{type}</option>
           ))}
         </select>
       </div>
-      <div>
-        <label>Gear:  </label>
-        <select id="gear" value={myGear} onChange={(e) => handleDropDownChange(e, setMyGear)}>
-          <option value="" disabled>Select Gear</option>
-          {allGear.map((gear, index) => (
-            <option key={index} value={gear}>{gear}</option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label>Features:  </label>
-        <select id="features" value={myFeature} onChange={(e) => handleDropDownChange(e, setMyFeature)}>
-          <option value="" disabled>Select Feature</option>
-          {allFeatures.map((feature, index) => (
-            <option key={index} value={feature}>{feature}</option>
-          ))}
-        </select>
-      </div>
+      {myHunterType === '10' && (<SpellSlinger />)}
     </div>
   )
 }
