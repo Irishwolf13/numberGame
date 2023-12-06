@@ -12,13 +12,8 @@ export default function SpellSlinger({ setBackend, hunterType, name, gender}) {
     look: '',
     feature: '',
     gear: '',
-    magic1: '',
-    magic2: '',
-    magic3: '',
-    magicMove1: 'Tools and Techniques',
-    magicMove2: '',
-    magicMove3: '',
-    magicMove4: '',
+    magic: {},
+    magicMove: {},
     charm:0,
     cool:0,
     sharp:0,
@@ -37,6 +32,8 @@ export default function SpellSlinger({ setBackend, hunterType, name, gender}) {
       // Cleanup code when the component unmounts or before the next effect runs
     };
   }, [name, hunterType, gender]);
+  const [selectedMagic, setSelectedMagic] = useState(new Set());
+  const [selectedMove, setSelectedMove] = useState(new Set());
   
   const hunterLook = ["Rumpled clothes", "Stylish clothes", "Goth clothes", "Old Fashioned clothes"]
   const hunterFeatures = ["Shadowed eyes", "Fierce eyes", "Weary eyes", "Sparkling eyes"]
@@ -124,10 +121,40 @@ export default function SpellSlinger({ setBackend, hunterType, name, gender}) {
   };
 
   const handleButtonClicked = () => {
-    // console.log(current);
-    setBackend(previous => [...previous, current]);
-    navigate(`/selectCharacter`);
+    console.log(selectedMagic);
+    console.log(current)
+    // setBackend(previous => [...previous, current]);
+    // navigate(`/selectCharacter`);
   }
+
+  const isFirstFourSelected = (myObject) => 
+    Array.from(myObject).some((name, index) => index < 4);
+
+  const handleCheckboxChange = (event, myObject, mySetter) => {
+    const name = event.target.value;
+    let updatedSelection = new Set(myObject);
+
+    if (event.target.checked) {
+      updatedSelection.add(name);
+      if (updatedSelection.size > 3) {
+        return;
+      }
+    } else {
+      updatedSelection.delete(name);
+      if(!isFirstFourSelected(myObject)) {
+        const firstFourObjects = baseMagicObjects.slice(0, 4).map(obj => obj.name);
+        if(firstFourObjects.includes(name)) {
+          updatedSelection.add(name);
+        }
+      }
+    }
+
+    mySetter(updatedSelection);
+    setCurrent((prevState) => ({
+      ...prevState,
+      ['magic']: updatedSelection
+    }));
+  };
   
   return (
     <div>
@@ -138,19 +165,44 @@ export default function SpellSlinger({ setBackend, hunterType, name, gender}) {
       <div>
         <h3>Combat magic, pick three (with at least one base)</h3>
       </div>
-      {basicDropDown("Base Magic", "magic1", baseMagicObjects.filter(magic => magic.base).map(magic => magic.name), handleDropDownChange)}
-      {basicDropDown("Base or Effect Magic","magic2",baseMagicObjects.map(magic => magic.name),handleDropDownChange)}
-      {basicDropDown("Base or Effect Magic","magic3",baseMagicObjects.map(magic => magic.name),handleDropDownChange)}
+
+      <div>
+        {baseMagicObjects.map((magicObject, index) => (
+          <div key={index}>
+            <input
+              type="checkbox"
+              id={`magic-${index}`}
+              name={magicObject.name}
+              value={magicObject.name}
+              onChange={(e) => handleCheckboxChange(e, selectedMagic, setSelectedMagic)}
+              checked={selectedMagic.has(magicObject.name)}
+              disabled={!selectedMagic.has(magicObject.name) && selectedMagic.size >= 3}
+            />
+            <label htmlFor={`magic-${index}`}>{magicObject.name}</label>
+          </div>
+        ))}
+      </div>
+
       <div>
         <h3>You get four Spell-slinger moves.</h3>
         <label>You must have this one:  </label>
-        <select defaultValue='Tools and Techniques'>
-          <option value="Tools and Techniques">Tools and Techniques</option>
-        </select>
-        {basicDropDown("Spell-Slinger Move","magicMove2", magicMoves.slice(1).map(move => move.name), handleDropDownChange)}
-        {basicDropDown("Spell-Slinger Move","magicMove3", magicMoves.slice(1).map(move => move.name), handleDropDownChange)}
-        {basicDropDown("Spell-Slinger Move","magicMove4", magicMoves.slice(1).map(move => move.name), handleDropDownChange)}
+        <div>
+        {magicMoves.map((magicMove, index) => (
+          <div key={index}>
+            <input
+              type="checkbox"
+              id={`magic-${index}`}
+              name={magicMove.name}
+              value={magicMove.name}
+              onChange={(e) => handleCheckboxChange(e, selectedMove, setSelectedMove)}
+              checked={selectedMove.has(magicMove.name)}
+              disabled={!selectedMove.has(magicMove.name) && selectedMove.size >= 3}
+            />
+            <label htmlFor={`magic-${index}`}>{magicMove.name}</label>
+          </div>
+        ))}
       </div>
+        </div>
       <div>
         <button onClick={handleButtonClicked}>{`Create Character`}</button>
       </div>
