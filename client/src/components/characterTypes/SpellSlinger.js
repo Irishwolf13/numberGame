@@ -22,6 +22,7 @@ export default function SpellSlinger({ setBackend, hunterType, name, gender}) {
     image: spellSlingerImage
   });
   useEffect(() => {
+    setSelectedMove(new Set([magicMoves[0].name]));
     setCurrent((prevState) => ({
       ...prevState,
       ['hunterType']: hunterType,
@@ -127,33 +128,24 @@ export default function SpellSlinger({ setBackend, hunterType, name, gender}) {
     // navigate(`/selectCharacter`);
   }
 
-  const isFirstFourSelected = (myObject) => 
-    Array.from(myObject).some((name, index) => index < 4);
-
-  const handleCheckboxChange = (event, myObject, mySetter) => {
+  const handleCheckboxChange = (event, myObject, mySetter, myKey) => {
     const name = event.target.value;
     let updatedSelection = new Set(myObject);
 
     if (event.target.checked) {
       updatedSelection.add(name);
-      if (updatedSelection.size > 3) {
-        return;
-      }
     } else {
-      updatedSelection.delete(name);
-      if(!isFirstFourSelected(myObject)) {
-        const firstFourObjects = baseMagicObjects.slice(0, 4).map(obj => obj.name);
-        if(firstFourObjects.includes(name)) {
-          updatedSelection.add(name);
-        }
+      if (name !== magicMoves[0].name) { // Prevent unchecking of the first move
+        updatedSelection.delete(name);
       }
     }
 
     mySetter(updatedSelection);
+    
     setCurrent((prevState) => ({
-      ...prevState,
-      ['magic']: updatedSelection
-    }));
+        ...prevState,
+        [myKey]: updatedSelection
+      }));
   };
   
   return (
@@ -171,14 +163,14 @@ export default function SpellSlinger({ setBackend, hunterType, name, gender}) {
           <div key={index}>
             <input
               type="checkbox"
-              id={`magic-${index}`}
+              id={`base-magic-${index}`}
               name={magicObject.name}
               value={magicObject.name}
-              onChange={(e) => handleCheckboxChange(e, selectedMagic, setSelectedMagic)}
+              onChange={(e) => handleCheckboxChange(e, selectedMagic, setSelectedMagic, 'magic')}
               checked={selectedMagic.has(magicObject.name)}
               disabled={!selectedMagic.has(magicObject.name) && selectedMagic.size >= 3}
             />
-            <label htmlFor={`magic-${index}`}>{magicObject.name}</label>
+            <label htmlFor={`base-magic-${index}`}>{magicObject.name}</label>
           </div>
         ))}
       </div>
@@ -187,22 +179,22 @@ export default function SpellSlinger({ setBackend, hunterType, name, gender}) {
         <h3>You get four Spell-slinger moves.</h3>
         <label>You must have this one:  </label>
         <div>
-        {magicMoves.map((magicMove, index) => (
-          <div key={index}>
-            <input
-              type="checkbox"
-              id={`magic-${index}`}
-              name={magicMove.name}
-              value={magicMove.name}
-              onChange={(e) => handleCheckboxChange(e, selectedMove, setSelectedMove)}
-              checked={selectedMove.has(magicMove.name)}
-              disabled={!selectedMove.has(magicMove.name) && selectedMove.size >= 3}
-            />
-            <label htmlFor={`magic-${index}`}>{magicMove.name}</label>
-          </div>
-        ))}
-      </div>
+          {magicMoves.map((magicMove, index) => (
+            <div key={index}>
+              <input
+                type="checkbox"
+                id={`spell-move-${index}`}
+                name={magicMove.name}
+                value={magicMove.name}
+                onChange={(e) => handleCheckboxChange(e, selectedMove, setSelectedMove, 'magicMove')}
+                checked={selectedMove.has(magicMove.name)}
+                disabled={!selectedMove.has(magicMove.name) && selectedMove.size >= 4} // Correct the number here as well, it should be 4.
+              />
+              <label htmlFor={`spell-move-${index}`}>{magicMove.name}</label>
+            </div>
+          ))}
         </div>
+      </div>
       <div>
         <button onClick={handleButtonClicked}>{`Create Character`}</button>
       </div>
