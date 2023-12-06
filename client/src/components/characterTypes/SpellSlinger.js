@@ -1,17 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import spellSlingerImage from '../../images/spellSlinger.jpg';
 
-export default function SpellSlinger() {
-  const [state, setState] = useState({
-    myLook: '',
-    myFeature: '',
-    myGear: '',
-    myMagic1: '',
-    myMagic2: '',
-    myMagic3: '',
-    myMagicMove1: '',
-    myMagicMove2: '',
-    myMagicMove3: ''
+import { useNavigate } from 'react-router-dom';
+
+export default function SpellSlinger({ setBackend, hunterType, name, gender}) {
+  const navigate = useNavigate();
+  const [current, setCurrent] = useState({
+    hunterType: '',
+    name: '',
+    gender: '',
+    look: '',
+    feature: '',
+    gear: '',
+    magic1: '',
+    magic2: '',
+    magic3: '',
+    magicMove1: 'Tools and Techniques',
+    magicMove2: '',
+    magicMove3: '',
+    magicMove4: '',
+    charm:0,
+    cool:0,
+    sharp:0,
+    tough:0,
+    weird:0,
+    image: spellSlingerImage
   });
+  useEffect(() => {
+    setCurrent((prevState) => ({
+      ...prevState,
+      ['hunterType']: hunterType,
+      ['name']: name,
+      ['gender']: gender,
+    }));
+    return () => {
+      // Cleanup code when the component unmounts or before the next effect runs
+    };
+  }, [name, hunterType, gender]);
+  
   const hunterLook = ["Rumpled clothes", "Stylish clothes", "Goth clothes", "Old Fashioned clothes"]
   const hunterFeatures = ["Shadowed eyes", "Fierce eyes", "Weary eyes", "Sparkling eyes"]
   const hunterGear = [
@@ -30,7 +56,6 @@ export default function SpellSlinger() {
     {base:false, name: 'Frost or Ice', type:'effect', harm:1, armor:2, effects:'Adds “-1 harm +2 armour” to a wall, or “+1 harm restraining” to other bases'},
     {base:false, name: 'Earth', type:'effect', harm:0, armor:0, effects:'Add “forceful restraining” to a base'},
     {base:false, name: 'Necromantic', type:'effect', harm:0, armor:0, effects:'Add “life-drain” to a base'},
-    
   ]
   const magicMoves = [
     {name:'Tools and Techniques', description:['To use your combat magic effectively, you rely on a collection of tools and techniques. Cross off one; you’ll need the rest.', 'Consumables: You need certain supplies— powders, oils, etc—on hand, some will be used up each cast. If you don’t have them, take 1-harm ignore-armour when you cast','Foci: You need wands, staves, and other obvious props to focus. If you don’t have what you need, your combat magic does 1 less harm.','Gestures: You need to wave your hands around to use combat magic. If you’re restrained, take -1 ongoing for combat magic.','Incantations: You must speak in an arcane language to control your magic. If you use combat magic without speaking, act under pressure to avoid scrambling your thoughts.']},
@@ -46,38 +71,88 @@ export default function SpellSlinger() {
     {name:'Third Eye',description:['When you read a bad situation, you can open up your third eye for a moment to take in extra information. Take +1 hold on any result of 7 or more, plus you can see invisible things. On a miss, you may still get 1 hold, but you’re exposed to supernatural danger. Unfiltered hidden reality is rough on the mind!']}]
 
   const handleDropDownChange = (event, mySetterKey) => {
-    setState((prevState) => ({
+    setCurrent((prevState) => ({
       ...prevState,
       [mySetterKey]: event.target.value
     }));
   };
 
-  const dropdown = (id, valueKey, options, onChangeHandler) => {
+  const basicDropDown = (label, mySetterKey, options, handleChange) => {
     return (
       <div>
-        <label htmlFor={id}>{id}: </label>
-        <select id={id} value={state[valueKey]} onChange={(e) => onChangeHandler(e, valueKey)}>
-          <option value="" disabled>Select {id}</option>
-          {options.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
+        {/* <label>{label}:</label> */}
+        <select defaultValue="" onChange={(event) => handleChange(event, mySetterKey)}>
+          <option value="" disabled>Select {label}</option>
+          {options.map((option, index) => {
+            // Handle different structure of options for 'hunterGear' and others.
+            const value = typeof option === 'object' ? option.name : option;
+            return (
+              <option key={index} value={value}>
+                {value}
+              </option>
+            );
+          })}
         </select>
       </div>
     );
   };
+
+  const handleRatingChange = (e) => {
+    // Parse the selected option value back into an object
+    const newAttributes = JSON.parse(e.target.value);
+    
+    // Update the current state with the new attributes
+    setCurrent(prevState => ({
+      ...prevState,
+      ...newAttributes
+    }));
+  };
+  
+  const handleRatingDropdown = () => {
+    return (
+      <div>
+        <select defaultValue="" onChange={handleRatingChange}>
+          <option value="" disabled>Select Ratings</option>
+          <option value='{"charm":-1,"cool":1,"sharp":1,"tough":0,"weird":2}'>Charm -1, Cool +1, Sharp +1, Tough 0, Weird +2</option>
+          <option value='{"charm":0,"cool":-1,"sharp":1,"tough":1,"weird":2}'>Charm 0, Cool -1, Sharp +1, Tough +1, Weird +2</option>
+          <option value='{"charm":-1,"cool":0,"sharp":2,"tough":-1,"weird":2}'>Charm -1, Cool 0, Sharp +2, Tough -1, Weird +2</option>
+          <option value='{"charm":1,"cool":0,"sharp":1,"tough":-1,"weird":2}'>Charm +1, Cool 0, Sharp +1, Tough -1, Weird +2</option>
+          <option value='{"charm":0,"cool":0,"sharp":1,"tough":0,"weird":2}'>Charm 0, Cool 0, Sharp +1, Tough 0, Weird +2</option>
+        </select>
+      </div>
+    );
+  };
+
+  const handleButtonClicked = () => {
+    // console.log(current);
+    setBackend(previous => [...previous, current]);
+    navigate(`/selectCharacter`);
+  }
   
   return (
     <div>
-      {dropdown("Look", "myLook", hunterLook, handleDropDownChange)}
-      {dropdown("Features", "myFeature", hunterFeatures, handleDropDownChange)}
-      {dropdown("Gear", "myGear", hunterGear, handleDropDownChange)}
+      {basicDropDown("Look", "look", hunterLook, handleDropDownChange)}
+      {basicDropDown("Features", "feature", hunterFeatures, handleDropDownChange)}
+      {basicDropDown("Gear", "gear", hunterGear.map(gear => gear.name), handleDropDownChange)}
+      {handleRatingDropdown('test')}
       <div>
-        <h3>Moves You get all the basic moves and four Spell-slinger moves. You have this one:</h3>
-        <p>
-        Tools and Techniques: To use your combat magic effectively, you rely on a collection of tools and techniques. Cross off one; you’ll need the rest.
-        </p>
+        <h3>Combat magic, pick three (with at least one base)</h3>
+      </div>
+      {basicDropDown("Base Magic", "magic1", baseMagicObjects.filter(magic => magic.base).map(magic => magic.name), handleDropDownChange)}
+      {basicDropDown("Base or Effect Magic","magic2",baseMagicObjects.map(magic => magic.name),handleDropDownChange)}
+      {basicDropDown("Base or Effect Magic","magic3",baseMagicObjects.map(magic => magic.name),handleDropDownChange)}
+      <div>
+        <h3>You get four Spell-slinger moves.</h3>
+        <label>You must have this one:  </label>
+        <select defaultValue='Tools and Techniques'>
+          <option value="Tools and Techniques">Tools and Techniques</option>
+        </select>
+        {basicDropDown("Spell-Slinger Move","magicMove2", magicMoves.slice(1).map(move => move.name), handleDropDownChange)}
+        {basicDropDown("Spell-Slinger Move","magicMove3", magicMoves.slice(1).map(move => move.name), handleDropDownChange)}
+        {basicDropDown("Spell-Slinger Move","magicMove4", magicMoves.slice(1).map(move => move.name), handleDropDownChange)}
+      </div>
+      <div>
+        <button onClick={handleButtonClicked}>{`Create Character`}</button>
       </div>
     </div>
   )

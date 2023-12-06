@@ -5,6 +5,8 @@ import LogInPage from "./components/LogInPage";
 import SignUpPage from "./components/SignUpPage";
 import LandingPage from "./components/LandingPage";
 import CreateCharacter from "./components/CreateCharacter";
+import SelectCharacter from "./components/SelectCharacter";
+import CharacterSheet from "./components/CharacterSheet";
 import NavBar from "./components/NavBar";
 import { auth } from "./config/firebase";
 import "./App.css";
@@ -12,6 +14,8 @@ import "./App.css";
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [backend, setBackend] = useState([]);
+  const [currentCharater, setCurrentCharacter] = useState([]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -31,7 +35,10 @@ function App() {
       {isAuthenticated && <NavBar />}
       <Routes>
         <Route path="/home" element={isAuthenticated ? <HomePage /> : <Navigate to="/login" replace />} />
-        <Route path="/createCharacter" element={isAuthenticated ? <CreateCharacter /> : <Navigate to="/login" replace />} />
+        <Route path="/createCharacter" element={isAuthenticated ? <CreateCharacter setBackend={setBackend}/> : <Navigate to="/login" replace />} />
+        <Route path="/selectCharacter" element={isAuthenticated ? <SelectCharacter backend={backend} setCurrentCharacter={setCurrentCharacter}/> : <Navigate to="/login" replace />} />
+        <Route path="/characterSheet" element={isAuthenticated ? <CharacterSheet currentCharater={currentCharater}/> : <Navigate to="/login" replace />} />
+        
         <Route path="/login" element={!isAuthenticated ? <LogInPage /> : <Navigate to="/home" replace />} />
         <Route path="/signup" element={!isAuthenticated ? <SignUpPage /> : <Navigate to="/home" replace />} />
         <Route path="/" element={!isAuthenticated ? <LandingPage /> : <Navigate to="/home" replace />} />

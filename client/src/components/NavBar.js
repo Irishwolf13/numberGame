@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 export default function NavBar() {
   const navigate = useNavigate();
+  const handleNavigate = (destination) => {navigate(`/${destination}`);}
+
   const handleLogOut = async () => {
     try {
       await signOut(auth);
@@ -14,17 +16,12 @@ export default function NavBar() {
       console.error(err);
     }
   }
-  const handleGoHome = () => {navigate('/home');}
-  const handleCreateCharacter = () => {
-    console.log('iran')
-    navigate('/createCharacter');
-  }
-
+  
   return (
     <div className='navBar'>
-      <button onClick={handleGoHome}>Home page</button>
-      <button onClick={handleCreateCharacter}>Create Character</button>
-      <button>Select Character</button>
+      <button onClick={() => handleNavigate('home')}>Home page</button>
+      <button onClick={() => handleNavigate('createCharacter')}>Create Character</button>
+      <button onClick={() => handleNavigate('selectCharacter')}>Select Character</button>
       <button>Other</button>
       <button onClick={handleLogOut}>Log Out</button>
       {/* {auth.currentUser.email} */}

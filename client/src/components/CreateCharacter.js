@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { auth } from '../config/firebase.js'
-import { useNavigate } from 'react-router-dom';
-import SpellSlinger from './SpellSlinger.js';
+import SpellSlinger from './characterTypes/SpellSlinger.js';
 
-export default function CreateCharacter() {
-  const [myHunterType, setMyHunterType] = useState('');
-  const [myName, setMyName] = useState('');
-  const [myGender, setMyGender] = useState('');
+export default function CreateCharacter({setBackend}) {
+  const [hunterType, setHunterType] = useState('');
+  const [name, setName] = useState('');
+  const [gender, setGender] = useState('');
 
   // This is going to be arrays for now, but I think we want to get this information from the backend later
   const allGenders = ["Woman", "Man", "Androgynous", "Other"]
@@ -16,22 +14,22 @@ export default function CreateCharacter() {
   // End temp information
 
   const handleDropDownChange = (event, mySetter) => {
-    console.log(myHunterType)
+    // console.log(hunterType)
     mySetter(event.target.value);
   };
   const handleCharacterNameChange = (event) => {
-    setMyName(event.target.value);
+    setName(event.target.value);
   };
 
   return (
     <div>
       <div>
         <label>Character Name:  </label>
-        <input id='characterName' value={myName} onChange={handleCharacterNameChange}></input>
+        <input id='characterName' value={name} onChange={handleCharacterNameChange}></input>
       </div>
       <div>
         <label>Gender:  </label>
-        <select id="gender" value={myGender} onChange={(e) => handleDropDownChange(e, setMyGender)}>
+        <select id="gender" value={gender} onChange={(e) => handleDropDownChange(e, setGender)}>
           <option value="" disabled>Gender</option>
             {allGenders.map((type, index) => (
               <option key={index + 1} value={index + 1}>{type}</option>
@@ -40,14 +38,14 @@ export default function CreateCharacter() {
       </div>
       <div>
         <label htmlFor="dropdown">Select an option:  </label>
-        <select id="dropdown" value={myHunterType} onChange={(e) => handleDropDownChange(e, setMyHunterType)}>
+        <select id="dropdown" value={hunterType} onChange={(e) => handleDropDownChange(e, setHunterType)}>
           <option value="" disabled>Hunter Type</option>
           {allHunters.map((type, index) => (
             <option key={index + 1} value={index + 1}>{type}</option>
           ))}
         </select>
       </div>
-      {myHunterType === '10' && (<SpellSlinger />)}
+      {hunterType === '10' && (<SpellSlinger setBackend={setBackend} hunterType={hunterType} name={name} gender={gender}/>)}
     </div>
   )
 }
