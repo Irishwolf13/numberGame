@@ -25,3 +25,36 @@
 .otherContainer {
   margin-top: 25vh; /* Pushes the container down */
 }
+.flex {
+  display: flex;
+}
+.flex-2 {
+  flex: 2;
+}
+.flex-4 {
+  flex: 3;
+}
+.margin-right-small {
+  margin-right: 5px;
+}
+.margin-left {
+  margin-left: 5px;
+}
+.margin-all {
+  margin: 20px;
+}
+.no-wrap {
+  white-space: nowrap;
+}
+.text-grey {
+  color: rgba(0, 0, 0, );
+}
+.text-bold {
+  font-weight: bold;
+}
+.background {
+  background-color: aqua;
+}
+.background2 {
+  background-color: rgb(55, 255, 0);
+}
