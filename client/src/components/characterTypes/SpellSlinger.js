@@ -15,7 +15,7 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
     feature: '',
     gear: '',
     magic: {},
-    magicMove: {},
+    move: {},
     charm:0,
     cool:0,
     sharp:0,
@@ -195,8 +195,8 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
   const handleButtonClicked = () => {
     console.log(selectedMagic);
     console.log(current)
-    // setBackend(previous => [...previous, current]);
-    // navigate(`/selectCharacter`);
+    setBackend(previous => [...previous, current]);
+    navigate(`/selectCharacter`);
   }
 
   const handleCheckboxChange = (event, myObject, mySetter, myKey) => {
@@ -282,6 +282,7 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
         <div className='flex-4'>{hoverMagic}</div>
       </div>
 
+
       <div className='flex margin-left text-bold'>Effects:</div>
       <div className='flex'>
         <div className='flex-2'>
@@ -318,24 +319,24 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
       <div className='flex'>
         <div className='flex-2'>
           <div className='flex margin-left text-bold'>Pick three more...</div>
-          {magicMoves.map((magicMove, index) => (
+          {magicMoves.map((move, index) => (
             <div
               className='flex-2'
               key={index}
-              onMouseEnter={() => setHoverMagicMove(magicMove.description)}
+              onMouseEnter={() => setHoverMagicMove(move.description)}
               onMouseLeave={() => setHoverMagicMove('Hover over Spell-Slinger Move for description')}
             >
               <div className='flex' >
                 <input
                   type="checkbox"
                   id={`spell-move-${index}`}
-                  name={magicMove.name}
-                  value={magicMove.name}
-                  onChange={(e) => handleCheckboxChange(e, selectedMove, setSelectedMove, 'magicMove')}
-                  checked={selectedMove.has(magicMove.name)}
-                  disabled={!selectedMove.has(magicMove.name) && selectedMove.size >= 4}
+                  name={move.name}
+                  value={move.name}
+                  onChange={(e) => handleCheckboxChange(e, selectedMove, setSelectedMove, 'move')}
+                  checked={selectedMove.has(move.name)}
+                  disabled={!selectedMove.has(move.name) && selectedMove.size >= 4}
                 />
-                <label htmlFor={`spell-move-${index}`} className={`no-wrap flex${selectedMove.has(magicMove.name) ? ' text-bold' : ''}`}>{magicMove.name}</label>
+                <label htmlFor={`spell-move-${index}`} className={`no-wrap flex${selectedMove.has(move.name) ? ' text-bold' : ''}`}>{move.name}</label>
               </div>
             </div>
           ))}

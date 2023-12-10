@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import spellSlingerImage from '../../images/spellSlinger.jpg';
+import flake1 from '../../images/flake1.jpg';
 
 import { useNavigate } from 'react-router-dom';
 
 export default function Flake({ setBackend, hunterType, name}) {
+  const navigate = useNavigate();
   const [gender, setGender] = useState('');
   const [current, setCurrent] = useState({
     hunterType: '',
@@ -12,13 +14,14 @@ export default function Flake({ setBackend, hunterType, name}) {
     look: '',
     feature: '',
     gear: '',
+    magic: {},
     moves: {},
     charm:0,
     cool:0,
     sharp:0,
     tough:0,
     weird:0,
-    image: spellSlingerImage
+    image: flake1
   });
   useEffect(() => {
     // setSelectedMove(new Set([magicMoves[0].name]));
@@ -33,10 +36,10 @@ export default function Flake({ setBackend, hunterType, name}) {
     };
   }, [name, hunterType, gender]);
   const [selectedMove, setSelectedMove] = useState(new Set());
-  const [hoverMove, setHoverMove] = useState('Hover over for description');
+  const [hoverMove, setHoverMove] = useState('Hover over Moves for descriptions');
   const [selectedGear, setSelectedGear] = useState(new Set());
   const [selectedGear2, setSelectedGear2] = useState(new Set());
-  const [hoverGear, setHoverGear] = useState('Hover over for description');
+  const [hoverGear, setHoverGear] = useState('Hover over Weapons for descriptions');
   
   const myGenders = ["Woman", "Man", "Transgressive", "Concealed"]
   const hunterLook = ["Ratty Clothes", "Casual Clothes", "Rumpled Suit", "Neat Clothes", "Comfortable Clothes", "Army Surplus Gear"]
@@ -47,14 +50,14 @@ export default function Flake({ setBackend, hunterType, name}) {
     {base:true, name:"Hunting rifle",harm:2,distance:'hand',subtle:"messy",sounds:'loud'},
     {base:true, name:"Magnum",harm:3,distance:'hand',subtle:"reload",sounds:'loud'},
     {base:true, name:"Shotgun",harm:3,distance:'hand',subtle:"messy",sounds:'loud'},
-    {base:true, name:"Big knife",harm:1,distance:'hand',subtle:"",sounds:'none'},
+    {base:true, name:"Big knife",harm:1,distance:'hand',subtle:"",sounds:''},
 
-    {base:false, name:"Throwing Knives",harm:1,distance:'close',subtle:"many",sounds:'none'},
+    {base:false, name:"Throwing Knives",harm:1,distance:'close',subtle:"many",sounds:''},
     {base:false, name:"Holdout Pistol",harm:2,distance:'close',subtle:"reload",sounds:'loud'},
-    {base:false, name:"Garrote",harm:3,distance:'intimate',subtle:"",sounds:'none'},
-    {base:false, name:"Watchman's Flashlight",harm:1,distance:'hand',subtle:"",sounds:'none'},
-    {base:false, name:"Weighted Gloves/Brass Knuckles",harm:1,distance:'hand',subtle:"",sounds:'none'},
-    {base:false, name:"Butterfly Knife/Folding Knife",harm:1,distance:'hand',subtle:"",sounds:'none'}
+    {base:false, name:"Garrote",harm:3,distance:'intimate',subtle:"",sounds:''},
+    {base:false, name:"Watchman's Flashlight",harm:1,distance:'hand',subtle:"",sounds:''},
+    {base:false, name:"Weighted Gloves/Brass Knuckles",harm:1,distance:'hand',subtle:"",sounds:''},
+    {base:false, name:"Butterfly Knife/Folding Knife",harm:1,distance:'hand',subtle:"",sounds:''}
   ]
   
   const flakeMoves = [
@@ -127,11 +130,11 @@ export default function Flake({ setBackend, hunterType, name}) {
     if (flakeObject.harm !== 0) {
       hoverText += `Harm: ${flakeObject.harm}, `;
     }
-    if (flakeObject.armor !== 0) {
+    if (flakeObject.armor) {
       hoverText += `Armor: ${flakeObject.armor}, `;
     }
-    if (flakeObject.base) {
-      hoverText += `${flakeObject.type} `;
+    if (flakeObject) {
+      // hoverText += `${flakeObject.type} `;
       hoverText += `${flakeObject.distance} `;
       hoverText += `${flakeObject.subtle} `;
       hoverText += `${flakeObject.sounds} `;
@@ -171,8 +174,8 @@ export default function Flake({ setBackend, hunterType, name}) {
   const handleButtonClicked = () => {
     console.log(selectedMove);
     console.log(current)
-    // setBackend(previous => [...previous, current]);
-    // navigate(`/selectCharacter`);
+    setBackend(previous => [...previous, current]);
+    navigate(`/selectCharacter`);
   }
 
   const handleCheckboxChange = (event, myObject, mySetter, myKey) => {
@@ -205,7 +208,7 @@ export default function Flake({ setBackend, hunterType, name}) {
       {basicDropDown("Features", "feature", hunterFeatures, handleDropDownChange)}
       {handleRatingDropdown('test')}
 
-      <h3>Combat Gear: You get one Normal and two Hidden.</h3>
+      <h3>Pick one Normal Weapon and two Hidden Weapons.</h3>
       <div className='flex margin-left text-bold'>Normal Weapons:</div>
       <div className='flex'>
         <div className='flex-2'>
@@ -214,7 +217,7 @@ export default function Flake({ setBackend, hunterType, name}) {
             <div 
               className={`margin-right-small no-wrap flex `}
               onMouseEnter={() => handleGearHover(flakeObject)}
-              onMouseLeave={() => setHoverGear(``)}
+              onMouseLeave={() => setHoverGear(`Hover over weapon for descriptions`)}
             >   
               <input
                 className='flex margin-right-small'
@@ -245,7 +248,7 @@ export default function Flake({ setBackend, hunterType, name}) {
             <div 
               className={`margin-right-small no-wrap flex `}
               onMouseEnter={() => handleGearHover(flakeObject)}
-              onMouseLeave={() => setHoverGear(``)}
+              onMouseLeave={() => setHoverGear(`'Hover over Weapons for descriptions'`)}
             >   
               <input
                 className='flex margin-right-small'
@@ -270,7 +273,7 @@ export default function Flake({ setBackend, hunterType, name}) {
       
 
 
-      <h3>Flake Moves, Pick three</h3>
+      <h3>Pick Three Flake Moves</h3>
       <div className='flex'>
         <div className='flex-2'>
         {flakeMoves.map((flakeObject, index) => (
@@ -278,7 +281,7 @@ export default function Flake({ setBackend, hunterType, name}) {
             <div 
               className={`margin-right-small no-wrap flex `}
               onMouseEnter={() => handleFlakeHover(flakeObject)}
-              onMouseLeave={() => setHoverMove(``)}
+              onMouseLeave={() => setHoverMove(`Hover over Moves for descriptions`)}
             >   
               <input
                 className='flex margin-right-small'
