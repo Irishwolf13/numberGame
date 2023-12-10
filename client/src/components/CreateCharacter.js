@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import SpellSlinger from './characterTypes/SpellSlinger.js';
+import Flake from './characterTypes/Flake.js';
 
 export default function CreateCharacter({setBackend}) {
   const [hunterType, setHunterType] = useState('');
   const [name, setName] = useState('');
-  const [gender, setGender] = useState('');
 
   // This is going to be arrays for now, but I think we want to get this information from the backend later
-  const allGenders = ["Woman", "Man", "Androgynous", "Other"]
   const allHunters = [
     "The Chosen","The Crooked","The Divine","The Expert","The Flake","The Initiate","The Monstrous",
     "The Mundane","The Professional","The Spell-Slinger","The Spooky","The Wronged"];
@@ -28,15 +27,6 @@ export default function CreateCharacter({setBackend}) {
         <input id='characterName' value={name} onChange={handleCharacterNameChange}></input>
       </div>
       <div>
-        <label>Gender:  </label>
-        <select id="gender" value={gender} onChange={(e) => handleDropDownChange(e, setGender)}>
-          <option value="" disabled>Gender</option>
-            {allGenders.map((type, index) => (
-              <option key={index + 1} value={index + 1}>{type}</option>
-            ))}
-        </select>
-      </div>
-      <div>
         <label htmlFor="dropdown">Select an option:  </label>
         <select id="dropdown" value={hunterType} onChange={(e) => handleDropDownChange(e, setHunterType)}>
           <option value="" disabled>Hunter Type</option>
@@ -45,7 +35,8 @@ export default function CreateCharacter({setBackend}) {
           ))}
         </select>
       </div>
-      {hunterType === '10' && (<SpellSlinger setBackend={setBackend} hunterType={hunterType} name={name} gender={gender}/>)}
+      {hunterType === '10' && (<SpellSlinger setBackend={setBackend} hunterType={hunterType} name={name}/>)}
+      {hunterType === '5' && (<Flake setBackend={setBackend} hunterType={hunterType} name={name}/>)}
     </div>
   )
 }

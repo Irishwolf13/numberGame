@@ -3,8 +3,10 @@ import spellSlingerImage from '../../images/spellSlinger.jpg';
 
 import { useNavigate } from 'react-router-dom';
 
-export default function SpellSlinger({ setBackend, hunterType, name, gender}) {
+export default function SpellSlinger({ setBackend, hunterType, name}) {
   const navigate = useNavigate();
+  const [gender, setGender] = useState('');
+  const myGenders = ["Woman", "Man", "Androgynous"]
   const [current, setCurrent] = useState({
     hunterType: '',
     name: '',
@@ -34,6 +36,7 @@ export default function SpellSlinger({ setBackend, hunterType, name, gender}) {
     };
   }, [name, hunterType, gender]);
   const [selectedMagic, setSelectedMagic] = useState(new Set());
+  const [selectedBaseMagic, setSelectedBaseMagic] = useState(new Set());
   const [selectedMove, setSelectedMove] = useState(new Set());  
   const [hoverMagicMove, setHoverMagicMove] = useState('Hover over Spell-Slinger Move for description');
   const [hoverMagic, setHoverMagic] = useState('Hover over for description');
@@ -238,16 +241,18 @@ export default function SpellSlinger({ setBackend, hunterType, name, gender}) {
   
   return (
     <div className='margin-all'>
-      <h4>Spell Slinger choices</h4>
+      
+      {basicDropDown("Gender", "gender", myGenders, handleDropDownChange)}
       {basicDropDown("Look", "look", hunterLook, handleDropDownChange)}
       {basicDropDown("Features", "feature", hunterFeatures, handleDropDownChange)}
       {basicDropDown("Gear", "gear", hunterGear.map(gear => gear.name), handleDropDownChange)}
       {handleRatingDropdown('test')}
 
       <h3>Combat magic, pick three (with at least one base)</h3>
+      <div className='flex margin-left text-bold'>Base Magic:</div>
       <div className='flex'>
         <div className='flex-2'>
-        {baseMagicObjects.map((magicObject, index) => (
+        {baseMagicObjects.filter(magicObject => magicObject.base).map((magicObject, index) => (
           <div key={index} className='flex-2'>
             <div 
               className={`margin-right-small no-wrap flex `}
@@ -260,19 +265,53 @@ export default function SpellSlinger({ setBackend, hunterType, name, gender}) {
                 id={`base-magic-${index}`}
                 name={magicObject.name}
                 value={magicObject.name}
-                onChange={(e) => handleCheckboxChange(e, selectedMagic, setSelectedMagic, 'magic')}
+                onChange={(e) => {
+                  handleCheckboxChange(e, selectedMagic, setSelectedMagic, 'magic');
+                  handleCheckboxChange(e, selectedBaseMagic, setSelectedBaseMagic, 'magic');
+                }}
                 checked={selectedMagic.has(magicObject.name)}
                 disabled={!selectedMagic.has(magicObject.name) && selectedMagic.size >= 3}
               />
               <label htmlFor={`base-magic-${index}`} className={`no-wrap flex${selectedMagic.has(magicObject.name) ? ' text-bold' : ''}`}> 
-                {magicObject.base && <span className='margin-right'>{`Base: ${magicObject.name}`}</span>}
-                {!magicObject.base && <span>{`Effect: ${magicObject.name}`}</span>}
+                {magicObject.base && <span className='margin-right'>{`${magicObject.name}`}</span>}
               </label>
             </div>
           </div>
         ))}
         </div>
         <div className='flex-4'>{hoverMagic}</div>
+      </div>
+
+      <div className='flex margin-left text-bold'>Effects:</div>
+      <div className='flex'>
+        <div className='flex-2'>
+        {baseMagicObjects.filter(magicObject => !magicObject.base).map((magicObject, index) => (
+          <div key={index} className='flex-2'>
+            <div 
+              className={`margin-right-small no-wrap flex `}
+              onMouseEnter={() => handleMagicHover(magicObject)}
+              onMouseLeave={() => setHoverMagic(``)}
+            >   
+              <input
+                className='flex margin-right-small'
+                type="checkbox"
+                id={`effect-magic-${index}`}
+                name={magicObject.name}
+                value={magicObject.name}
+                onChange={(e) => handleCheckboxChange(e, selectedMagic, setSelectedMagic, 'magic')}
+                checked={selectedMagic.has(magicObject.name)}
+                disabled={
+                  (!selectedMagic.has(magicObject.name) && selectedMagic.size >= 3)
+                  || selectedBaseMagic.size === 0
+                }
+              />
+              <label htmlFor={`effect-magic-${index}`} className={`no-wrap flex${selectedMagic.has(magicObject.name) ? ' text-bold' : ''}`}> 
+                {!magicObject.base && <span>{`${magicObject.name}`}</span>}
+              </label>
+            </div>
+          </div>
+        ))}
+        </div>
       </div>
 
       <h3>You get four Spell-slinger moves.</h3>
