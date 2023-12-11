@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 export default function SpellSlinger({ setBackend, hunterType, name}) {
   const navigate = useNavigate();
-  const [gender, setGender] = useState('');
   const myGenders = ["Woman", "Man", "Androgynous"]
   const [current, setCurrent] = useState({
     hunterType: '',
@@ -24,19 +23,19 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
     image: spellSlingerImage
   });
   useEffect(() => {
-    setSelectedMove(new Set([magicMoves[0].name]));
+    setSelectedMove(new Set([magicMoves[0].name])); // This makes sure Tools and Techniques is selected by default
     setCurrent((prevState) => ({
       ...prevState,
       ['hunterType']: hunterType,
       ['name']: name,
-      ['gender']: gender,
     }));
     return () => {
       // Cleanup code when the component unmounts or before the next effect runs
     };
-  }, [name, hunterType, gender]);
+  }, [name, hunterType]);
   const [selectedMagic, setSelectedMagic] = useState(new Set());
   const [selectedBaseMagic, setSelectedBaseMagic] = useState(new Set());
+
   const [selectedMove, setSelectedMove] = useState(new Set());  
   const [hoverMagicMove, setHoverMagicMove] = useState('Hover over Spell-Slinger Move for description');
   const [hoverMagic, setHoverMagic] = useState('Hover over for description');
@@ -196,7 +195,7 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
     console.log(selectedMagic);
     console.log(current)
     setBackend(previous => [...previous, current]);
-    navigate(`/selectCharacter`);
+    // navigate(`/selectCharacter`);
   }
 
   const handleCheckboxChange = (event, myObject, mySetter, myKey) => {
