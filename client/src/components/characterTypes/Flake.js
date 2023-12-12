@@ -312,6 +312,31 @@ export default function Flake({ setBackend, hunterType, name}) {
       ))}
     </>
   }
+
+  const historyIntro = () => {
+    return <>
+      <div>
+        <div className='container-intro margin-top'>Introduction</div>
+        <textarea
+          placeholder='Click here to add an intoduction.'
+          className='input-intro'
+          onChange={(e) => handleDropDownChange(e, 'introduction')}
+          onMouseEnter={() => setHoverGear(myIntroductionGuidence)}
+          onMouseLeave={() => setHoverGear(`Hover over Moves for descriptions`)}
+        ></textarea>
+      </div>
+      <div>
+        <div className='container-intro margin-top'>History</div>
+        <textarea 
+          placeholder='Click here to add your history.'
+          className='input-intro'
+          onChange={(e) => handleDropDownChange(e, 'history')}
+          onMouseEnter={() => setHoverGear(myHistoryGuidence)}
+          onMouseLeave={() => setHoverGear(`Hover over Moves for descriptions`)}
+        ></textarea>
+      </div>
+    </>
+  }
   
   return (
     <div className='margin-all'>
@@ -332,30 +357,8 @@ export default function Flake({ setBackend, hunterType, name}) {
           <h3 className='flex margin-left'>Pick Three Flake Moves</h3>
           <div>{flakeMoves()}</div>
         </div>
-        {/* <div className='flex-4'>{hoverMove}</div> */}
       </div>
-      <div  className='flex'>
-        <div>
-          <div className='container-intro margin-top'>Introduction</div>
-          <textarea
-            placeholder='Click here to add an intoduction.'
-            className='input-intro'
-            onChange={(e) => handleDropDownChange(e, 'introduction')}
-            onMouseEnter={() => setHoverGear(myIntroductionGuidence)}
-            onMouseLeave={() => setHoverGear(`Hover over Moves for descriptions`)}
-          ></textarea>
-        </div>
-        <div>
-          <div className='container-intro margin-top'>History</div>
-          <textarea 
-            placeholder='Click here to add your history.'
-            className='input-intro'
-            onChange={(e) => handleDropDownChange(e, 'history')}
-            onMouseEnter={() => setHoverGear(myHistoryGuidence)}
-            onMouseLeave={() => setHoverGear(`Hover over Moves for descriptions`)}
-          ></textarea>
-        </div>
-      </div>
+      <div className='flex'>{historyIntro()}</div>
       <div><button onClick={handleButtonClicked}>{`Create Character`}</button></div>
       <div className='flex-4'>{hoverGear}</div> {/* This bit is where the description will go */}
     </div>

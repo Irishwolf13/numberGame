@@ -400,6 +400,31 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
     </>
   }
 
+  const historyIntro = () => {
+    return <>
+      <div>
+        <div className='container-intro margin-top'>Introduction</div>
+        <textarea
+          placeholder='Click here to add an intoduction.'
+          className='input-intro'
+          onChange={(e) => handleDropDownChange(e, 'introduction')}
+          onMouseEnter={() => setHoverMagic(myIntroductionGuidence)}
+          onMouseLeave={() => setHoverMagic(`Hover over Moves for descriptions`)}
+        ></textarea>
+      </div>
+      <div>
+        <div className='container-intro margin-top'>History</div>
+        <textarea 
+          placeholder='Click here to add your history.'
+          className='input-intro'
+          onChange={(e) => handleDropDownChange(e, 'history')}
+          onMouseEnter={() => setHoverMagic(myHistoryGuidence)}
+          onMouseLeave={() => setHoverMagic(`Hover over Moves for descriptions`)}
+        ></textarea>
+      </div>
+    </>
+  }
+
   return (
     <div className='margin-all'>
       
@@ -408,7 +433,6 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
       {basicDropDown("Features", "feature", hunterFeatures, handleDropDownChange)}
       {specialGearDropdown(hunterGear)}
       {handleRatingDropdown('test')}
-
 
       <div className='flex'>
         <div className='flex-2'>
@@ -424,28 +448,7 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
           <div>{spellSlingerMoves()}</div>
         </div>
       </div>
-      <div  className='flex'>
-        <div>
-          <div className='container-intro margin-top'>Introduction</div>
-          <textarea
-            placeholder='Click here to add an intoduction.'
-            className='input-intro'
-            onChange={(e) => handleDropDownChange(e, 'introduction')}
-            onMouseEnter={() => setHoverMagic(myIntroductionGuidence)}
-            onMouseLeave={() => setHoverMagic(`Hover over Moves for descriptions`)}
-          ></textarea>
-        </div>
-        <div>
-          <div className='container-intro margin-top'>History</div>
-          <textarea 
-            placeholder='Click here to add your history.'
-            className='input-intro'
-            onChange={(e) => handleDropDownChange(e, 'history')}
-            onMouseEnter={() => setHoverMagic(myHistoryGuidence)}
-            onMouseLeave={() => setHoverMagic(`Hover over Moves for descriptions`)}
-          ></textarea>
-        </div>
-      </div>
+      <div  className='flex'>{historyIntro()}</div>
       <div><button onClick={handleButtonClicked}>{`Create Character`}</button></div>
       <div className='flex-4'>{hoverMagic}</div>
     </div>
