@@ -350,14 +350,14 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
 
       <div className='flex'>
         <div className='flex-2'>
-          <h3 className='flex margin-left text-bold'>Combat magic, pick three (with at least one base)</h3>
+          <h3 className='flex margin-left'>Combat magic, pick three (with at least one base)</h3>
           <div className='flex margin-left text-bold'>Base Magic:</div>
           <div>{magicBases()}</div>
           <div className='flex margin-left text-bold'>Effects:</div>
           <div>{magicEffects()}</div>
         </div>
         <div className='flex-2'>
-          <h3 className='flex margin-left text-bold'>You get four Spell-slinger moves.</h3>
+          <h3 className='flex margin-left'>You get four Spell-slinger moves.</h3>
           <div className='flex margin-left text-bold'>Pick three more...</div>
           <div>{spellSlingerMoves()}</div>
         </div>

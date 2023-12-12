@@ -203,6 +203,92 @@ export default function Flake({ setBackend, hunterType, name}) {
     hoverText += `${flakeObject.description}, `;
     setHoverGear(hoverText.trimEnd());
   }
+
+  const gearStandard = () => {
+    return <>
+      {hunterGear.filter(flakeObject => flakeObject.base).map((flakeObject, index) => (
+        <div key={index} className='flex-2'>
+          <div 
+            className={`margin-right-small no-wrap flex `}
+            onMouseEnter={() => handleGearHover(flakeObject)}
+            onMouseLeave={() => setHoverGear(`Hover over weapon for descriptions`)}
+          >   
+            <input
+              className='flex margin-right-small'
+              type="checkbox"
+              id={`base-gear-${index}`}
+              name={flakeObject.name}
+              value={flakeObject.name}
+              onChange={(e) => handleCheckboxChange(e, selectedGear, setSelectedGear, 'gear')}
+              checked={flakeObject.name in selectedGear} 
+              disabled={!((flakeObject.name in selectedGear) || Object.keys(selectedGear).length < 1)} 
+            />
+            <label htmlFor={`base-flake-${index}`} className={`no-wrap flex${flakeObject.name in selectedGear ? ' text-bold' : ''}`}> 
+              {flakeObject.base && <span className='margin-right'>{`Normal: ${flakeObject.name}`}</span>}
+              {!flakeObject.base && <span>{`Hidden: ${flakeObject.name}`}</span>}
+            </label>
+          </div>
+        </div>
+      ))}
+    </>
+  }
+
+  const gearHidden = () => {
+    return <>
+      {hunterGear.filter(flakeObject => !flakeObject.base).map((flakeObject, index) => (
+        <div key={index} className='flex-2'>
+          <div 
+            className={`margin-right-small no-wrap flex `}
+            onMouseEnter={() => handleGearHover(flakeObject)}
+            onMouseLeave={() => setHoverGear(`'Hover over Weapons for descriptions'`)}
+          >   
+            <input
+              className='flex margin-right-small'
+              type="checkbox"
+              id={`hidden-gear-${index}`}
+              name={flakeObject.name}
+              value={flakeObject.name}
+              onChange={(e) => handleCheckboxChange(e, selectedGear2, setSelectedGear2, 'gear')}
+              checked={flakeObject.name in selectedGear2} 
+              disabled={!((flakeObject.name in selectedGear2) || Object.keys(selectedGear2).length < 2)} 
+            />
+            <label htmlFor={`base-flake-${index}`} className={`no-wrap flex${flakeObject.name in selectedGear2 ? ' text-bold' : ''}`}> 
+              {flakeObject.base && <span className='margin-right'>{`Normal: ${flakeObject.name}`}</span>}
+              {!flakeObject.base && <span>{`Hidden: ${flakeObject.name}`}</span>}
+            </label>
+          </div>
+        </div>
+      ))}
+    </>
+  }
+
+  const flakeMoves = () => {
+    return <>
+      {myMoves.map((myObject, index) => (
+        <div key={index} className='flex-2'>
+          <div 
+            className={`margin-right-small no-wrap flex `}
+            onMouseEnter={() => handleFlakeHover(myObject)}
+            onMouseLeave={() => setHoverGear(`Hover over Moves for descriptions`)}
+          >   
+            <input
+              className='flex margin-right-small'
+              type="checkbox"
+              id={`base-flake-${index}`}
+              name={myObject.name}
+              value={myObject.name}
+              onChange={(e) => handleCheckboxChange(e, selectedMove, setSelectedMove, 'moves')}
+              checked={myObject.name in selectedMove} // Check if myObject.name is a key in the selectedMove object
+              disabled={!((myObject.name in selectedMove) || Object.keys(selectedMove).length < 3)} // Disable if not selected and there are already 3 moves
+            />
+            <label htmlFor={`base-flake-${index}`} className={`no-wrap flex${myObject.name in selectedMove ? ' text-bold' : ''}`}> 
+              {myObject.name && <span className='margin-right'>{`${myObject.name}`}</span>}
+            </label>
+          </div>
+        </div>
+      ))}
+    </>
+  }
   
   return (
     <div className='margin-all'>
@@ -211,97 +297,23 @@ export default function Flake({ setBackend, hunterType, name}) {
       {basicDropDown("Features", "feature", hunterFeatures, handleDropDownChange)}
       {handleRatingDropdown('test')}
 
-      <h3>Pick one Normal Weapon and two Hidden Weapons.</h3>
-      <div className='flex margin-left text-bold'>Normal Weapons:</div>
       <div className='flex'>
         <div className='flex-2'>
-        {hunterGear.filter(flakeObject => flakeObject.base).map((flakeObject, index) => (
-          <div key={index} className='flex-2'>
-            <div 
-              className={`margin-right-small no-wrap flex `}
-              onMouseEnter={() => handleGearHover(flakeObject)}
-              onMouseLeave={() => setHoverGear(`Hover over weapon for descriptions`)}
-            >   
-              <input
-                className='flex margin-right-small'
-                type="checkbox"
-                id={`base-gear-${index}`}
-                name={flakeObject.name}
-                value={flakeObject.name}
-                onChange={(e) => handleCheckboxChange(e, selectedGear, setSelectedGear, 'gear')}
-                checked={flakeObject.name in selectedGear} 
-                disabled={!((flakeObject.name in selectedGear) || Object.keys(selectedGear).length < 1)} 
-              />
-              <label htmlFor={`base-flake-${index}`} className={`no-wrap flex${flakeObject.name in selectedGear ? ' text-bold' : ''}`}> 
-                {flakeObject.base && <span className='margin-right'>{`Normal: ${flakeObject.name}`}</span>}
-                {!flakeObject.base && <span>{`Hidden: ${flakeObject.name}`}</span>}
-              </label>
-            </div>
-          </div>
-        ))}
+          <h3 className='flex margin-left'>Pick one Normal Weapon and two Hidden Weapons.</h3>
+          <div className='flex margin-left text-bold'>Normal Weapons:</div>
+          <div>{gearStandard()}</div>
+          <div className='flex margin-left text-bold'>Hidden Weapons:</div>
+          <div>{gearHidden()}</div>
         </div>
-        <div className='flex-4'>{hoverGear}</div> {/* This bit is where the description will go */}
-      </div>
-
-      <div className='flex margin-left text-bold'>Hidden Weapons:</div>
-      <div className='flex'>
         <div className='flex-2'>
-        {hunterGear.filter(flakeObject => !flakeObject.base).map((flakeObject, index) => (
-          <div key={index} className='flex-2'>
-            <div 
-              className={`margin-right-small no-wrap flex `}
-              onMouseEnter={() => handleGearHover(flakeObject)}
-              onMouseLeave={() => setHoverGear(`'Hover over Weapons for descriptions'`)}
-            >   
-              <input
-                className='flex margin-right-small'
-                type="checkbox"
-                id={`hidden-gear-${index}`}
-                name={flakeObject.name}
-                value={flakeObject.name}
-                onChange={(e) => handleCheckboxChange(e, selectedGear2, setSelectedGear2, 'gear')}
-                checked={flakeObject.name in selectedGear2} 
-                disabled={!((flakeObject.name in selectedGear2) || Object.keys(selectedGear2).length < 2)} 
-              />
-              <label htmlFor={`base-flake-${index}`} className={`no-wrap flex${flakeObject.name in selectedGear2 ? ' text-bold' : ''}`}> 
-                {flakeObject.base && <span className='margin-right'>{`Normal: ${flakeObject.name}`}</span>}
-                {!flakeObject.base && <span>{`Hidden: ${flakeObject.name}`}</span>}
-              </label>
-            </div>
-          </div>
-        ))}
-        </div>
-      </div>
-      <h3>Pick Three Flake Moves</h3>
-      <div className='flex'>
-        <div className='flex-2'>
-        {myMoves.map((myObject, index) => (
-          <div key={index} className='flex-2'>
-            <div 
-              className={`margin-right-small no-wrap flex `}
-              onMouseEnter={() => handleFlakeHover(myObject)}
-              onMouseLeave={() => setHoverGear(`Hover over Moves for descriptions`)}
-            >   
-              <input
-                className='flex margin-right-small'
-                type="checkbox"
-                id={`base-flake-${index}`}
-                name={myObject.name}
-                value={myObject.name}
-                onChange={(e) => handleCheckboxChange(e, selectedMove, setSelectedMove, 'moves')}
-                checked={myObject.name in selectedMove} // Check if myObject.name is a key in the selectedMove object
-                disabled={!((myObject.name in selectedMove) || Object.keys(selectedMove).length < 3)} // Disable if not selected and there are already 3 moves
-              />
-              <label htmlFor={`base-flake-${index}`} className={`no-wrap flex${myObject.name in selectedMove ? ' text-bold' : ''}`}> 
-                {myObject.name && <span className='margin-right'>{`${myObject.name}`}</span>}
-              </label>
-            </div>
-          </div>
-        ))}
+          <h3 className='flex margin-left'>Pick Three Flake Moves</h3>
+          <div>{flakeMoves()}</div>
         </div>
         {/* <div className='flex-4'>{hoverMove}</div> */}
       </div>
+
       <div><button onClick={handleButtonClicked}>{`Create Character`}</button></div>
+      <div className='flex-4'>{hoverGear}</div> {/* This bit is where the description will go */}
     </div>
   )
 }
