@@ -43,6 +43,12 @@
 .margin-all {
   margin: 20px;
 }
+.margin-top {
+  margin-top: 20px;
+}
+.margin-bottom {
+  margin-bottom: 20px;
+}
 .no-wrap {
   white-space: nowrap;
 }
@@ -59,8 +65,14 @@
   background-color: rgb(55, 255, 0);
 }
 
-.frank {
+.container-description {
   text-align: center;
   min-height: 100px;
   max-width: 500px;
+}
+
+.input-intro {
+  min-height: 100px;
+  width: 500px;
+  min-width: 300px;
 }

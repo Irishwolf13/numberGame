@@ -12,7 +12,7 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
     gender: '',
     look: '',
     feature: '',
-    gear: '',
+    gear: {},
     magic: {},
     move: {},
     charm:0,
@@ -20,6 +20,8 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
     sharp:0,
     tough:0,
     weird:0,
+    introduction: '',
+    history: '',
     image: spellSlingerImage
   });
   useEffect(() => {
@@ -44,8 +46,8 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
   const hunterFeatures = ["Shadowed eyes", "Fierce eyes", "Weary eyes", "Sparkling eyes"]
   const hunterGear = [
     {name:"Old Revolver",harm:2,distance:'close',subtle:"reload",sounds:'loud'}, 
-    {name:"Ritual Knife",harm:1,distance:'hand',subtle:"",sounds:'none'}, 
-    {name:"Heirloom Sword",harm:2,distance:'hand',subtle:"messy",sounds:'none'}
+    {name:"Ritual Knife",harm:1,distance:'hand',subtle:"",sounds:''}, 
+    {name:"Heirloom Sword",harm:2,distance:'hand',subtle:"messy",sounds:''}
   ]
   const magicalElements = [
     {base:true, 
@@ -125,6 +127,29 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
       effects:'Add “life-drain” to a base'
     },
   ]
+  const myIntroductionGuidence = `Introduce your
+  Spell-slinger by name and look, and tell the group what
+  they know about you.`
+  const myHistoryGuidence = `Pick one for
+  each of the other hunters:
+  • They act as your conscience when the power goes
+  to your head. Ask them about the last time this happened.
+  • Blood relation, though you were out of contact for
+  years. Ask them how they reconnected with you.
+  • Mentor from another life. Ask them what they
+  taught you.
+  • Your magic-fueled rescue of them introduced them
+  to the supernatural. Tell them what creature was
+  after them.
+  • An old rivalry has turned into a tight friendship. Tell
+  them what you once fought over.
+  • You thought they were dead, and now they’re back.
+  What “killed” them?
+  • They’re an on-again/off-again love interest. Ask
+  them what keeps you apart. Tell them what keeps
+  you together.
+  • A comrade-in-arms. You’ve faced the biggest threats
+  together.`
   const magicMoves = [
     {name:'Tools and Techniques', description:`To use your combat magic effectively, you rely on a collection of tools and techniques. Cross off one; you’ll need the rest.',\n'Consumables: You need certain supplies— powders, oils, etc—on hand, some will be used up each cast. If you don’t have them, take 1-harm ignore-armour when you cast',\n'Foci: You need wands, staves, and other obvious props to focus. If you don’t have what you need, your combat magic does 1 less harm.',\n'Gestures: You need to wave your hands around to use combat magic. If you’re restrained, take -1 ongoing for combat magic.',\n'Incantations: You must speak in an arcane language to control your magic. If you use combat magic without speaking, act under pressure to avoid scrambling your thoughts.`},
     {name:'Advanced Arcane Training', description:'If you have two of your three Tools and Techniques at the ready, you may ignore the third one.'},
@@ -152,8 +177,7 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
         <select defaultValue="" onChange={(event) => handleChange(event, mySetterKey)}>
           <option value="" disabled>Select {label}</option>
           {options.map((option, index) => {
-            // Handle different structure of options for 'hunterGear' and others.
-            const value = typeof option === 'object' ? option.name : option;
+            const value = typeof option === 'object' ? option : option;
             return (
               <option key={index} value={value}>
                 {value}
@@ -164,6 +188,44 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
       </div>
     );
   };
+  const specialGearDropdown = (myGear) => {
+    const handleSelectChange = (event) => {
+      handleGearChange(event.target.value, myGear);
+    };
+    
+    return (
+      <div>
+        <select defaultValue="" onChange={handleSelectChange}>
+          <option value="" disabled>Select</option>
+          {myGear.map((option, index) => {
+            // Use index as the value for the option
+            return (
+              <option key={index} value={index}>
+                {`${option.name}: Harm${option.harm}, ${option.distance}, ${option.subtle} ${option.sounds}`}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+    );
+  };
+  
+  const handleGearChange = (selectedIndex, gearArray) => {
+    // Parse selectedIndex to an integer since values from the DOM are strings
+    const index = parseInt(selectedIndex, 10);
+    // Use the index to get the object from gearArray
+    const selectedGear = gearArray[index];
+  
+    setCurrent((prevState) => ({
+      ...prevState,
+      gear: {
+        ...prevState.gear, // Preserve existing content of 'gear', if necessary
+        [selectedGear.name]: selectedGear
+      }
+    }));
+  };
+  
+  
 
   const handleRatingChange = (e) => {
     // Parse the selected option value back into an object
@@ -195,7 +257,7 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
     console.log(selectedMagic);
     console.log(current)
     setBackend(previous => [...previous, current]);
-    // navigate(`/selectCharacter`);
+    navigate(`/selectCharacter`);
   }
 
   const handleCheckboxChange = (event, myObject, mySetter, myKey) => {
@@ -344,7 +406,7 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
       {basicDropDown("Gender", "gender", myGenders, handleDropDownChange)}
       {basicDropDown("Look", "look", hunterLook, handleDropDownChange)}
       {basicDropDown("Features", "feature", hunterFeatures, handleDropDownChange)}
-      {basicDropDown("Gear", "gear", hunterGear.map(gear => gear.name), handleDropDownChange)}
+      {specialGearDropdown(hunterGear)}
       {handleRatingDropdown('test')}
 
 
@@ -362,9 +424,30 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
           <div>{spellSlingerMoves()}</div>
         </div>
       </div>
-
+      <div  className='flex'>
+        <div>
+          <div className='container-intro margin-top'>Introduction</div>
+          <textarea
+            placeholder='Click here to add an intoduction.'
+            className='input-intro'
+            onChange={(e) => handleDropDownChange(e, 'introduction')}
+            onMouseEnter={() => setHoverMagic(myIntroductionGuidence)}
+            onMouseLeave={() => setHoverMagic(`Hover over Moves for descriptions`)}
+          ></textarea>
+        </div>
+        <div>
+          <div className='container-intro margin-top'>History</div>
+          <textarea 
+            placeholder='Click here to add your history.'
+            className='input-intro'
+            onChange={(e) => handleDropDownChange(e, 'history')}
+            onMouseEnter={() => setHoverMagic(myHistoryGuidence)}
+            onMouseLeave={() => setHoverMagic(`Hover over Moves for descriptions`)}
+          ></textarea>
+        </div>
+      </div>
       <div><button onClick={handleButtonClicked}>{`Create Character`}</button></div>
-      <div className='flex-4 frank'>{hoverMagic}</div>
+      <div className='flex-4'>{hoverMagic}</div>
     </div>
   )
 }

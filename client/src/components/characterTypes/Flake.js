@@ -19,6 +19,8 @@ export default function Flake({ setBackend, hunterType, name}) {
     sharp:0,
     tough:0,
     weird:0,
+    introduction: '',
+    history: '',
     image: flake1
   });
   useEffect(() => {
@@ -61,6 +63,27 @@ export default function Flake({ setBackend, hunterType, name}) {
     {base:false, name:"Weighted Gloves/Brass Knuckles",harm:1,distance:'hand',subtle:"",sounds:'',description:''},
     {base:false, name:"Butterfly Knife/Folding Knife",harm:1,distance:'hand',subtle:"",sounds:'',description:''}
   ]
+  const myIntroductionGuidence = `Introduce your
+  Flake by name and look, and tell the group what they
+  know about you.`
+  const myHistoryGuidence = `Pick one of
+  these for each other hunter:
+  • They’re somehow tied into it all. You’ve been keeping
+  an eye on them.
+  • They’re a close relative. Ask them to decide exactly
+  what.
+  • Old friends, who originally met through a long chain
+  of coincidences.
+  • You went through hell together: maybe a monster,
+  maybe military service, maybe time in an institution.
+  Whatever it was, it bound you together, and you
+  have total trust in each other.
+  • Members of the same support group.
+  • Fellow freaks.
+  • The signs all pointed to working together. So you
+  found them and now you work together.
+  • You know each other through cryptozoology and
+  conspiracy theory websites.`
   
   const myMoves = [
     {name:'Connect the Dots', description:`At the beginning of each mystery,
@@ -171,7 +194,7 @@ export default function Flake({ setBackend, hunterType, name}) {
   const handleButtonClicked = () => {
     setBackend(previous => [...previous, current]);
     console.log(current);
-    // navigate(`/selectCharacter`);
+    navigate(`/selectCharacter`);
   }
 
   const handleCheckboxChange = (event, myObject, mySetter, myKey) => {
@@ -223,7 +246,7 @@ export default function Flake({ setBackend, hunterType, name}) {
               checked={flakeObject.name in selectedGear} 
               disabled={!((flakeObject.name in selectedGear) || Object.keys(selectedGear).length < 1)} 
             />
-            <label htmlFor={`base-flake-${index}`} className={`no-wrap flex${flakeObject.name in selectedGear ? ' text-bold' : ''}`}> 
+            <label htmlFor={`base-gear-${index}`} className={`no-wrap flex${flakeObject.name in selectedGear ? ' text-bold' : ''}`}> 
               {flakeObject.base && <span className='margin-right'>{`Normal: ${flakeObject.name}`}</span>}
               {!flakeObject.base && <span>{`Hidden: ${flakeObject.name}`}</span>}
             </label>
@@ -252,7 +275,7 @@ export default function Flake({ setBackend, hunterType, name}) {
               checked={flakeObject.name in selectedGear2} 
               disabled={!((flakeObject.name in selectedGear2) || Object.keys(selectedGear2).length < 2)} 
             />
-            <label htmlFor={`base-flake-${index}`} className={`no-wrap flex${flakeObject.name in selectedGear2 ? ' text-bold' : ''}`}> 
+            <label htmlFor={`hidden-gear-${index}`} className={`no-wrap flex${flakeObject.name in selectedGear2 ? ' text-bold' : ''}`}> 
               {flakeObject.base && <span className='margin-right'>{`Normal: ${flakeObject.name}`}</span>}
               {!flakeObject.base && <span>{`Hidden: ${flakeObject.name}`}</span>}
             </label>
@@ -278,8 +301,8 @@ export default function Flake({ setBackend, hunterType, name}) {
               name={myObject.name}
               value={myObject.name}
               onChange={(e) => handleCheckboxChange(e, selectedMove, setSelectedMove, 'moves')}
-              checked={myObject.name in selectedMove} // Check if myObject.name is a key in the selectedMove object
-              disabled={!((myObject.name in selectedMove) || Object.keys(selectedMove).length < 3)} // Disable if not selected and there are already 3 moves
+              checked={myObject.name in selectedMove} 
+              disabled={!((myObject.name in selectedMove) || Object.keys(selectedMove).length < 3)}
             />
             <label htmlFor={`base-flake-${index}`} className={`no-wrap flex${myObject.name in selectedMove ? ' text-bold' : ''}`}> 
               {myObject.name && <span className='margin-right'>{`${myObject.name}`}</span>}
@@ -311,7 +334,28 @@ export default function Flake({ setBackend, hunterType, name}) {
         </div>
         {/* <div className='flex-4'>{hoverMove}</div> */}
       </div>
-
+      <div  className='flex'>
+        <div>
+          <div className='container-intro margin-top'>Introduction</div>
+          <textarea
+            placeholder='Click here to add an intoduction.'
+            className='input-intro'
+            onChange={(e) => handleDropDownChange(e, 'introduction')}
+            onMouseEnter={() => setHoverGear(myIntroductionGuidence)}
+            onMouseLeave={() => setHoverGear(`Hover over Moves for descriptions`)}
+          ></textarea>
+        </div>
+        <div>
+          <div className='container-intro margin-top'>History</div>
+          <textarea 
+            placeholder='Click here to add your history.'
+            className='input-intro'
+            onChange={(e) => handleDropDownChange(e, 'history')}
+            onMouseEnter={() => setHoverGear(myHistoryGuidence)}
+            onMouseLeave={() => setHoverGear(`Hover over Moves for descriptions`)}
+          ></textarea>
+        </div>
+      </div>
       <div><button onClick={handleButtonClicked}>{`Create Character`}</button></div>
       <div className='flex-4'>{hoverGear}</div> {/* This bit is where the description will go */}
     </div>
