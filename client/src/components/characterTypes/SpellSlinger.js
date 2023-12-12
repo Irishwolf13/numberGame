@@ -23,22 +23,22 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
     image: spellSlingerImage
   });
   useEffect(() => {
-    setSelectedMove(new Set([magicMoves[0].name])); // This makes sure Tools and Techniques is selected by default
     setCurrent((prevState) => ({
       ...prevState,
       ['hunterType']: hunterType,
       ['name']: name,
     }));
-    return () => {
-      // Cleanup code when the component unmounts or before the next effect runs
-    };
   }, [name, hunterType]);
+
+  useEffect(() => {
+    setSelectedMove({[magicMoves[0].name]: magicMoves[0]});
+  }, []);
+
   const [selectedMagic, setSelectedMagic] = useState(new Set());
   const [selectedBaseMagic, setSelectedBaseMagic] = useState(new Set());
 
-  const [selectedMove, setSelectedMove] = useState(new Set());  
-  const [hoverMagicMove, setHoverMagicMove] = useState('Hover over Spell-Slinger Move for description');
-  const [hoverMagic, setHoverMagic] = useState('Hover over for description');
+  const [selectedMove, setSelectedMove] = useState(new Set());
+  const [hoverMagic, setHoverMagic] = useState('Hover over items for description');
   
   const hunterLook = ["Rumpled clothes", "Stylish clothes", "Goth clothes", "Old Fashioned clothes"]
   const hunterFeatures = ["Shadowed eyes", "Fierce eyes", "Weary eyes", "Sparkling eyes"]
@@ -47,7 +47,7 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
     {name:"Ritual Knife",harm:1,distance:'hand',subtle:"",sounds:'none'}, 
     {name:"Heirloom Sword",harm:2,distance:'hand',subtle:"messy",sounds:'none'}
   ]
-  const baseMagicObjects = [
+  const magicalElements = [
     {base:true, 
       name: 'Blast', 
       type:'magic', 
@@ -126,17 +126,17 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
     },
   ]
   const magicMoves = [
-    {name:'Tools and Techniques', description:[`To use your combat magic effectively, you rely on a collection of tools and techniques. Cross off one; you’ll need the rest.',\n'Consumables: You need certain supplies— powders, oils, etc—on hand, some will be used up each cast. If you don’t have them, take 1-harm ignore-armour when you cast',\n'Foci: You need wands, staves, and other obvious props to focus. If you don’t have what you need, your combat magic does 1 less harm.',\n'Gestures: You need to wave your hands around to use combat magic. If you’re restrained, take -1 ongoing for combat magic.',\n'Incantations: You must speak in an arcane language to control your magic. If you use combat magic without speaking, act under pressure to avoid scrambling your thoughts.`]},
-    {name:'Advanced Arcane Training', description:['If you have two of your three Tools and Techniques at the ready, you may ignore the third one.']},
-    {name:'Arcane Reputation', description:['Pick three big organizations or groups in the supernatural community, which can include some of the more sociable types of monsters. They’ve heard of you and respect your power. With affected humans, take +1 forward when you manipulate them. You may manipulate affected monsters as if they were human, with no bonus.']},
-    {name:'Could have been worse', description:['When you miss a use magic roll you can choose one of the following options instead of losing control of the magic.','Fizzle: The preparations and materials for the spell are ruined. You’ll have to start over from scratch with the prep time doubled.','This Is Gonna Suck: The effect happens, but you trigger all of the listed glitches but one. You pick the one you avoid.']},
-    {name:'Enchated Clothing', description:['Pick an article of every-day clothing–it’s enchanted without any change in appearance. Take -1 harm from any source that tries to get at you through the garment.']},
-    {name:'Forensic Divination', description:['When you successfully investigate a mystery, you may ask “What magic was done here?” as a free extra question.']},
-    {name:'Go Big or Go Home',description:['When you must use magic as a requirement for Big Magic, take +1 ongoing to those use magic rolls.']},
-    {name:'Noy my fault',description:['+1 to act under pressure when you are dealing with the consequences of your own spellcasting.']},
-    {name:'Practitioner',description:['Choose two effects available to you under use magic. Take +1 to use magic whenever you choose one of those effects.']},
-    {name:'Shield Spell',description:['When you protect someone, gain 2-armour against any harm that is transferred to you. This doesn’t stack with your other armour, if any']},
-    {name:'Third Eye',description:['When you read a bad situation, you can open up your third eye for a moment to take in extra information. Take +1 hold on any result of 7 or more, plus you can see invisible things. On a miss, you may still get 1 hold, but you’re exposed to supernatural danger. Unfiltered hidden reality is rough on the mind!']}]
+    {name:'Tools and Techniques', description:`To use your combat magic effectively, you rely on a collection of tools and techniques. Cross off one; you’ll need the rest.',\n'Consumables: You need certain supplies— powders, oils, etc—on hand, some will be used up each cast. If you don’t have them, take 1-harm ignore-armour when you cast',\n'Foci: You need wands, staves, and other obvious props to focus. If you don’t have what you need, your combat magic does 1 less harm.',\n'Gestures: You need to wave your hands around to use combat magic. If you’re restrained, take -1 ongoing for combat magic.',\n'Incantations: You must speak in an arcane language to control your magic. If you use combat magic without speaking, act under pressure to avoid scrambling your thoughts.`},
+    {name:'Advanced Arcane Training', description:'If you have two of your three Tools and Techniques at the ready, you may ignore the third one.'},
+    {name:'Arcane Reputation', description:'Pick three big organizations or groups in the supernatural community, which can include some of the more sociable types of monsters. They’ve heard of you and respect your power. With affected humans, take +1 forward when you manipulate them. You may manipulate affected monsters as if they were human, with no bonus.'},
+    {name:'Could have been worse', description:'When you miss a use magic roll you can choose one of the following options instead of losing control of the magic.  Fizzle: The preparations and materials for the spell are ruined. You’ll have to start over from scratch with the prep time doubled.  This Is Gonna Suck: The effect happens, but you trigger all of the listed glitches but one. You pick the one you avoid.'},
+    {name:'Enchated Clothing', description:'Pick an article of every-day clothing–it’s enchanted without any change in appearance. Take -1 harm from any source that tries to get at you through the garment.'},
+    {name:'Forensic Divination', description:'When you successfully investigate a mystery, you may ask “What magic was done here?” as a free extra question.'},
+    {name:'Go Big or Go Home',description:'When you must use magic as a requirement for Big Magic, take +1 ongoing to those use magic rolls.'},
+    {name:'Noy my fault',description:'+1 to act under pressure when you are dealing with the consequences of your own spellcasting.'},
+    {name:'Practitioner',description:'Choose two effects available to you under use magic. Take +1 to use magic whenever you choose one of those effects.'},
+    {name:'Shield Spell',description:'When you protect someone, gain 2-armour against any harm that is transferred to you. This doesn’t stack with your other armour, if any'},
+    {name:'Third Eye',description:'When you read a bad situation, you can open up your third eye for a moment to take in extra information. Take +1 hold on any result of 7 or more, plus you can see invisible things. On a miss, you may still get 1 hold, but you’re exposed to supernatural danger. Unfiltered hidden reality is rough on the mind!'}]
 
   const handleDropDownChange = (event, mySetterKey) => {
     setCurrent((prevState) => ({
@@ -200,22 +200,35 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
 
   const handleCheckboxChange = (event, myObject, mySetter, myKey) => {
     const name = event.target.value;
-    let updatedSelection = new Set(myObject);
-
-    if (event.target.checked) {
-      updatedSelection.add(name);
+    let description = '';
+    
+    // Determine description based on the 'myKey' value
+    if (myKey === 'magic') {
+      description = magicalElements.find(element => element.name === name);
     } else {
-      if (name !== magicMoves[0].name) { // Prevent unchecking of the first move
-        updatedSelection.delete(name);
-      }
+      description = magicMoves.find(magicMove => magicMove.name === name);
     }
-
+    
+    // Do not allow unchecking if it is the first item of magicMoves
+    if (myKey !== 'magic' && name === magicMoves[0].name && !event.target.checked) {
+      return;
+    }
+  
+    // Update selection based on the checkbox state
+    let updatedSelection = { ...myObject };
+    if (event.target.checked) {
+      updatedSelection[name] = description;
+    } else {
+      delete updatedSelection[name];
+    }
     mySetter(updatedSelection);
     setCurrent((prevState) => ({
-        ...prevState,
-        [myKey]: updatedSelection
-      }));
+      ...prevState,
+      [myKey]: updatedSelection
+    }));
   };
+  
+  
 
   const handleMagicHover = (magicObject) => {
     let hoverText = '';
@@ -238,6 +251,93 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
     setHoverMagic(hoverText.trimEnd());
   }
   
+  const spellSlingerMoves = () => {
+    return <>
+      {magicMoves.map((move, index) => (
+        <div
+          className='flex-2'
+          key={index}
+          onMouseEnter={() => setHoverMagic(move.description)}
+          onMouseLeave={() => setHoverMagic('Hover over items for description')}
+        >
+          <div className='flex' >
+            <input
+              type="checkbox"
+              id={`spell-move-${index}`}
+              name={move.name}
+              value={move.name}
+              onChange={(e) => handleCheckboxChange(e, selectedMove, setSelectedMove, 'move')}
+              checked={move.name in selectedMove} 
+              disabled={!((move.name in selectedMove) || Object.keys(selectedMove).length < 4)}
+            />
+            <label htmlFor={`spell-move-${index}`} className={`no-wrap flex${move.name in selectedMove ? ' text-bold' : ''}`}> 
+              {move.name && <span className='margin-right'>{`${move.name}`}</span>}
+            </label>
+            </div>
+        </div>
+      ))}
+    </>
+  }
+
+  const magicEffects = () => {
+    return <>
+      {magicalElements.filter(magicObject => !magicObject.base).map((magicObject, index) => (
+        <div key={index} className='flex-2'>
+          <div 
+            className={`margin-right-small no-wrap flex `}
+            onMouseEnter={() => handleMagicHover(magicObject)}
+            onMouseLeave={() => setHoverMagic(`Hover over items for description`)}
+          >   
+            <input
+              className='flex margin-right-small'
+              type="checkbox"
+              id={`effect-magic-${index}`}
+              name={magicObject.name}
+              value={magicObject.name}
+              onChange={(e) => handleCheckboxChange(e, selectedMagic, setSelectedMagic, 'magic')}
+              checked={magicObject.name in selectedMagic} 
+              disabled={!((magicObject.name in selectedMagic) || Object.keys(selectedMagic).length >= 1 && Object.keys(selectedMagic).length < 3) } 
+            />
+            <label htmlFor={`effect-magic-${index}`} className={`no-wrap flex${magicObject.name in selectedMagic ? ' text-bold' : ''}`}> 
+              {!magicObject.base && <span className='margin-right'>{`${magicObject.name}`}</span>}
+            </label>
+          </div>
+        </div>
+      ))}
+    </>
+  }
+
+  const magicBases = () => {
+    return <>
+      {magicalElements.filter(magicObject => magicObject.base).map((magicObject, index) => (
+        <div key={index} className='flex-2'>
+          <div 
+            className={`margin-right-small no-wrap flex `}
+            onMouseEnter={() => handleMagicHover(magicObject)}
+            onMouseLeave={() => setHoverMagic(`Hover over items for description`)}
+          >   
+            <input
+              className='flex margin-right-small'
+              type="checkbox"
+              id={`base-magic-${index}`}
+              name={magicObject.name}
+              value={magicObject.name}
+              onChange={(e) => {
+                handleCheckboxChange(e, selectedMagic, setSelectedMagic, 'magic');
+                handleCheckboxChange(e, selectedBaseMagic, setSelectedBaseMagic, 'magic');
+              }}
+              checked={magicObject.name in selectedMagic} 
+              disabled={!((magicObject.name in selectedMagic) || Object.keys(selectedMagic).length < 3)} 
+            />
+            <label htmlFor={`base-magic-${index}`} className={`no-wrap flex${magicObject.name in selectedMagic ? ' text-bold' : ''}`}> 
+              {magicObject.base && <span className='margin-right'>{`${magicObject.name}`}</span>}
+            </label>
+          </div>
+        </div>
+      ))}
+    </>
+  }
+
   return (
     <div className='margin-all'>
       
@@ -247,104 +347,24 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
       {basicDropDown("Gear", "gear", hunterGear.map(gear => gear.name), handleDropDownChange)}
       {handleRatingDropdown('test')}
 
-      <h3>Combat magic, pick three (with at least one base)</h3>
-      <div className='flex margin-left text-bold'>Base Magic:</div>
+
       <div className='flex'>
         <div className='flex-2'>
-        {baseMagicObjects.filter(magicObject => magicObject.base).map((magicObject, index) => (
-          <div key={index} className='flex-2'>
-            <div 
-              className={`margin-right-small no-wrap flex `}
-              onMouseEnter={() => handleMagicHover(magicObject)}
-              onMouseLeave={() => setHoverMagic(``)}
-            >   
-              <input
-                className='flex margin-right-small'
-                type="checkbox"
-                id={`base-magic-${index}`}
-                name={magicObject.name}
-                value={magicObject.name}
-                onChange={(e) => {
-                  handleCheckboxChange(e, selectedMagic, setSelectedMagic, 'magic');
-                  handleCheckboxChange(e, selectedBaseMagic, setSelectedBaseMagic, 'magic');
-                }}
-                checked={selectedMagic.has(magicObject.name)}
-                disabled={!selectedMagic.has(magicObject.name) && selectedMagic.size >= 3}
-              />
-              <label htmlFor={`base-magic-${index}`} className={`no-wrap flex${selectedMagic.has(magicObject.name) ? ' text-bold' : ''}`}> 
-                {magicObject.base && <span className='margin-right'>{`${magicObject.name}`}</span>}
-              </label>
-            </div>
-          </div>
-        ))}
+          <h3 className='flex margin-left text-bold'>Combat magic, pick three (with at least one base)</h3>
+          <div className='flex margin-left text-bold'>Base Magic:</div>
+          <div>{magicBases()}</div>
+          <div className='flex margin-left text-bold'>Effects:</div>
+          <div>{magicEffects()}</div>
         </div>
-        <div className='flex-4'>{hoverMagic}</div>
-      </div>
-
-
-      <div className='flex margin-left text-bold'>Effects:</div>
-      <div className='flex'>
         <div className='flex-2'>
-        {baseMagicObjects.filter(magicObject => !magicObject.base).map((magicObject, index) => (
-          <div key={index} className='flex-2'>
-            <div 
-              className={`margin-right-small no-wrap flex `}
-              onMouseEnter={() => handleMagicHover(magicObject)}
-              onMouseLeave={() => setHoverMagic(``)}
-            >   
-              <input
-                className='flex margin-right-small'
-                type="checkbox"
-                id={`effect-magic-${index}`}
-                name={magicObject.name}
-                value={magicObject.name}
-                onChange={(e) => handleCheckboxChange(e, selectedMagic, setSelectedMagic, 'magic')}
-                checked={selectedMagic.has(magicObject.name)}
-                disabled={
-                  (!selectedMagic.has(magicObject.name) && selectedMagic.size >= 3)
-                  || selectedBaseMagic.size === 0
-                }
-              />
-              <label htmlFor={`effect-magic-${index}`} className={`no-wrap flex${selectedMagic.has(magicObject.name) ? ' text-bold' : ''}`}> 
-                {!magicObject.base && <span>{`${magicObject.name}`}</span>}
-              </label>
-            </div>
-          </div>
-        ))}
-        </div>
-      </div>
-
-      <h3>You get four Spell-slinger moves.</h3>
-      <div className='flex'>
-        <div className='flex-2'>
+          <h3 className='flex margin-left text-bold'>You get four Spell-slinger moves.</h3>
           <div className='flex margin-left text-bold'>Pick three more...</div>
-          {magicMoves.map((move, index) => (
-            <div
-              className='flex-2'
-              key={index}
-              onMouseEnter={() => setHoverMagicMove(move.description)}
-              onMouseLeave={() => setHoverMagicMove('Hover over Spell-Slinger Move for description')}
-            >
-              <div className='flex' >
-                <input
-                  type="checkbox"
-                  id={`spell-move-${index}`}
-                  name={move.name}
-                  value={move.name}
-                  onChange={(e) => handleCheckboxChange(e, selectedMove, setSelectedMove, 'move')}
-                  checked={selectedMove.has(move.name)}
-                  disabled={!selectedMove.has(move.name) && selectedMove.size >= 4}
-                />
-                <label htmlFor={`spell-move-${index}`} className={`no-wrap flex${selectedMove.has(move.name) ? ' text-bold' : ''}`}>{move.name}</label>
-              </div>
-            </div>
-          ))}
+          <div>{spellSlingerMoves()}</div>
         </div>
-        <div className='flex-4'>{hoverMagicMove}</div>
       </div>
-      <div>
-        <button onClick={handleButtonClicked}>{`Create Character`}</button>
-      </div>
+
+      <div><button onClick={handleButtonClicked}>{`Create Character`}</button></div>
+      <div className='flex-4 frank'>{hoverMagic}</div>
     </div>
   )
 }

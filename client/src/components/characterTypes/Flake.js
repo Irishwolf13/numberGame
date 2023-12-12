@@ -200,8 +200,8 @@ export default function Flake({ setBackend, hunterType, name}) {
 
   const handleFlakeHover = (flakeObject) => {
     let hoverText = '';
-    hoverText += `Harm: ${flakeObject.description}, `;
-    setHoverMove(hoverText.trimEnd());
+    hoverText += `${flakeObject.description}, `;
+    setHoverGear(hoverText.trimEnd());
   }
   
   return (
@@ -240,7 +240,7 @@ export default function Flake({ setBackend, hunterType, name}) {
           </div>
         ))}
         </div>
-        <div className='flex-4'>{hoverGear}</div>
+        <div className='flex-4'>{hoverGear}</div> {/* This bit is where the description will go */}
       </div>
 
       <div className='flex margin-left text-bold'>Hidden Weapons:</div>
@@ -269,13 +269,9 @@ export default function Flake({ setBackend, hunterType, name}) {
               </label>
             </div>
           </div>
-        ))}       
-
+        ))}
         </div>
       </div>
-      
-
-
       <h3>Pick Three Flake Moves</h3>
       <div className='flex'>
         <div className='flex-2'>
@@ -284,7 +280,7 @@ export default function Flake({ setBackend, hunterType, name}) {
             <div 
               className={`margin-right-small no-wrap flex `}
               onMouseEnter={() => handleFlakeHover(myObject)}
-              onMouseLeave={() => setHoverMove(`Hover over Moves for descriptions`)}
+              onMouseLeave={() => setHoverGear(`Hover over Moves for descriptions`)}
             >   
               <input
                 className='flex margin-right-small'
@@ -303,12 +299,9 @@ export default function Flake({ setBackend, hunterType, name}) {
           </div>
         ))}
         </div>
-        <div className='flex-4'>{hoverMove}</div>
+        {/* <div className='flex-4'>{hoverMove}</div> */}
       </div>
-
-      <div>
-        <button onClick={handleButtonClicked}>{`Create Character`}</button>
-      </div>
+      <div><button onClick={handleButtonClicked}>{`Create Character`}</button></div>
     </div>
   )
 }

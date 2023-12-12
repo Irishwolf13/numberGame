@@ -58,3 +58,9 @@
 .background2 {
   background-color: rgb(55, 255, 0);
 }
+
+.frank {
+  text-align: center;
+  min-height: 100px;
+  max-width: 500px;
+}
