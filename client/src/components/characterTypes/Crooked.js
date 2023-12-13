@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import choosen1 from '../../images/choosen1.jpg';
+import crooked1 from '../../images/crooked1.jpg';
 import { useNavigate } from 'react-router-dom';
 
-export default function Choosen({ setBackend, hunterType, name}) {
+export default function Crooked({ setBackend, hunterType, name}) {
   const navigate = useNavigate();
   const [current, setCurrent] = useState({
     hunterType: '',
@@ -10,7 +10,6 @@ export default function Choosen({ setBackend, hunterType, name}) {
     gender: '',
     look: '',
     feature: '',
-    hunterFate:'',
     gear: {},
     magic: {},
     moves: {},
@@ -22,7 +21,7 @@ export default function Choosen({ setBackend, hunterType, name}) {
     weird:0,
     introduction: '',
     history: '',
-    image: choosen1
+    image: crooked1
   });
   useEffect(() => {
     setCurrent((prevState) => ({
@@ -48,24 +47,20 @@ export default function Choosen({ setBackend, hunterType, name}) {
     };
     setCurrent(previous => ({ ...previous, gear: combinedGearSelection }));
   }, [selectedGear, selectedGear2, selectedGear3]);
-
-  const myGenders = ["Woman", "Man", "Girl", "Boy", "Androgynous"]
-  const hunterFeatures = ["Fresh Face", "Haggard Face", "Young Face", "Haunted Face", "Hopeful Face", "Controlled Face", ]
-  const hunterLook = ["Preppy clothes", "Casual wear", "Urban wear", "Normal clothes", "Neat clothes", "Stree wear"]
-  const hunterFates = ["Nightmares and Visions", "Some weirdo told you", "An ancient cult found you", "Sought out by your nemesis", "Attacked by monsters", "Trained from birth", "You found the prophecy", ]
+  
+  const myGenders = ["Woman", "Man", "Concealed"]
+  const hunterLook = ["Street wear", "Tailored suit", "Cheap suit", "Tracksuit", "Non-descript clothes"]
+  const hunterFeatures = ["Hard eyes", "Friendly eyes", "Watchful eyes", "Smiling eyes", "Calculating eyes"]
   const hunterGear = [
-    {base:true, name:"Staff", harm: 1 ,distance:'hand/close', subtle:"", sounds:'', description:''},
-    {base:true, name:"Haft", harm: 2 ,distance:'hand', subtle:"heavy", sounds:'', description:''},
-    {base:true, name:"Handle", harm: 1 ,distance:'hand', subtle:"balanced", sounds:'', description:''},
-    {base:true, name:"Chain", harm: 1 ,distance:'hand', subtle:"area", sounds:'', description:''},
-
-    {base:false, name:"Artifact",harm: 0 ,distance:'',subtle:"magic",sounds:'',description:''},
-    {base:false, name:"Spikes",harm: 1 ,distance:'',subtle:"messy",sounds:'',description:''},
-    {base:false, name:"Blade",harm: 1 ,distance:'close',subtle:"",sounds:'',description:''},
-    {base:false, name:"Heavy",harm: 1 ,distance:'',subtle:"",sounds:'',description:''},
-    {base:false, name:"Long",harm: 0 ,distance:'close',subtle:"",sounds:'',description:''},
-    {base:false, name:"Throwable",harm: 0 ,distance:'close',subtle:"",sounds:'',description:''},
-    {base:false, name:"Chain",harm: 0 ,distance:'',subtle:"area",sounds:'',description:''},
+    {base:true, name:"", harm: 0 ,distance:'', subtle:"", sounds:'', description:''},
+    {base:true, name:"", harm: 0 ,distance:'', subtle:"", sounds:'', description:''},
+    {base:true, name:"", harm: 0 ,distance:'', subtle:"", sounds:'', description:''},
+    {base:true, name:"", harm: 0 ,distance:'', subtle:"", sounds:'', description:''},
+    
+    {base:false, name:"",harm: 0 ,distance:'',subtle:"",sounds:'',description:''},
+    {base:false, name:"",harm: 0 ,distance:'',subtle:"",sounds:'',description:''},
+    {base:false, name:"",harm: 0 ,distance:'',subtle:"",sounds:'',description:''},
+    {base:false, name:"",harm: 0 ,distance:'',subtle:"",sounds:'',description:''},
   ]
   const myFate = [
     {heroic:true, name:"Sacrifice",description:'Sacrifice'},
@@ -435,7 +430,6 @@ export default function Choosen({ setBackend, hunterType, name}) {
     <div className='margin-all'>
       {basicDropDown("Gender", "gender", myGenders, handleDropDownChange)}
       {basicDropDown("Look", "look", hunterLook, handleDropDownChange)}
-      {basicDropDown("Select Feature", "feature", hunterFeatures, handleDropDownChange)}
       {handleRatingDropdown()}
 
       <div className='flex'>
@@ -452,7 +446,7 @@ export default function Choosen({ setBackend, hunterType, name}) {
           <h3 className='flex-centered'>Pick Three Choosen Moves</h3>
           <div>{ChoosenMoves()}</div>
           <h3 className='flex-centered'>Choose your fate</h3>
-          {basicDropDown("How you found out about your fate", "hunterFate", hunterFates, handleDropDownChange)}
+          {basicDropDown("How you found out about your fate", "feature", hunterFeatures, handleDropDownChange)}
           <div className='flex margin-top'>
             <div className='flex-2'>{fateForm()}</div>
             <div className='flex-2'>{fateForm2()}</div>

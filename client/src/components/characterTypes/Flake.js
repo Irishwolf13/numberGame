@@ -246,8 +246,7 @@ export default function Flake({ setBackend, hunterType, name}) {
               disabled={!((flakeObject.name in selectedGear) || Object.keys(selectedGear).length < 1)} 
             />
             <label htmlFor={`base-gear-${index}`} className={`no-wrap flex${flakeObject.name in selectedGear ? ' text-bold' : ''}`}> 
-              {flakeObject.base && <span className='margin-right'>{`Normal: ${flakeObject.name}`}</span>}
-              {!flakeObject.base && <span>{`Hidden: ${flakeObject.name}`}</span>}
+              {flakeObject.base && <span className='margin-right'>{`${flakeObject.name}`}</span>}
             </label>
           </div>
         </div>
@@ -275,8 +274,7 @@ export default function Flake({ setBackend, hunterType, name}) {
               disabled={!((flakeObject.name in selectedGear2) || Object.keys(selectedGear2).length < 2)} 
             />
             <label htmlFor={`hidden-gear-${index}`} className={`no-wrap flex${flakeObject.name in selectedGear2 ? ' text-bold' : ''}`}> 
-              {flakeObject.base && <span className='margin-right'>{`Normal: ${flakeObject.name}`}</span>}
-              {!flakeObject.base && <span>{`Hidden: ${flakeObject.name}`}</span>}
+              {!flakeObject.base && <span>{`${flakeObject.name}`}</span>}
             </label>
           </div>
         </div>

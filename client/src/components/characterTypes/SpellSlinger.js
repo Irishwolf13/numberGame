@@ -188,7 +188,7 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
       </div>
     );
   };
-  const specialGearDropdown = (myGear) => {
+  const specialGearDropdown = (label, myGear) => {
     const handleSelectChange = (event) => {
       handleGearChange(event.target.value, myGear);
     };
@@ -196,7 +196,7 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
     return (
       <div>
         <select defaultValue="" onChange={handleSelectChange}>
-          <option value="" disabled>Select</option>
+          <option value="" disabled>Select {label}</option>
           {myGear.map((option, index) => {
             // Use index as the value for the option
             return (
@@ -431,7 +431,7 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
       {basicDropDown("Gender", "gender", myGenders, handleDropDownChange)}
       {basicDropDown("Look", "look", hunterLook, handleDropDownChange)}
       {basicDropDown("Features", "feature", hunterFeatures, handleDropDownChange)}
-      {specialGearDropdown(hunterGear)}
+      {specialGearDropdown("Backup weapon", hunterGear)}
       {handleRatingDropdown()}
 
       <div className='flex'>

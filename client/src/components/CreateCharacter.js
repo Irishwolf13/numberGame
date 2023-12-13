@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Choosen from './characterTypes/Choosen.js';
+import Crooked from './characterTypes/Crooked.js';
 import Flake from './characterTypes/Flake.js';
 import SpellSlinger from './characterTypes/SpellSlinger.js';
 
@@ -36,8 +37,9 @@ export default function CreateCharacter({setBackend}) {
           ))}
         </select>
       </div>
-      {hunterType === '5' && (<Flake setBackend={setBackend} hunterType={hunterType} name={name}/>)}
       {hunterType === '1' && (<Choosen setBackend={setBackend} hunterType={hunterType} name={name}/>)}
+      {hunterType === '2' && (<Crooked setBackend={setBackend} hunterType={hunterType} name={name}/>)}
+      {hunterType === '5' && (<Flake setBackend={setBackend} hunterType={hunterType} name={name}/>)}
       {hunterType === '10' && (<SpellSlinger setBackend={setBackend} hunterType={hunterType} name={name}/>)}
     </div>
   )
