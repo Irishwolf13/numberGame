@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import flake1 from '../../images/flake1.jpg';
-
 import { useNavigate } from 'react-router-dom';
 
 export default function Flake({ setBackend, hunterType, name}) {
@@ -346,21 +345,24 @@ export default function Flake({ setBackend, hunterType, name}) {
       {handleRatingDropdown('test')}
 
       <div className='flex'>
-        <div className='flex-2'>
-          <h3 className='flex margin-left'>Pick one Normal Weapon and two Hidden Weapons.</h3>
+        <div className='flex-2 collumn'>
+          <h3 className='flex-centered'>Pick one Normal Weapon and two Hidden Weapons.</h3>
           <div className='flex margin-left text-bold'>Normal Weapons:</div>
           <div>{gearStandard()}</div>
           <div className='flex margin-left text-bold'>Hidden Weapons:</div>
           <div>{gearHidden()}</div>
         </div>
-        <div className='flex-2'>
-          <h3 className='flex margin-left'>Pick Three Flake Moves</h3>
+        <div className='flex-2 collumn'>
+          <h3 className='flex-centered'>Pick Three Flake Moves</h3>
           <div>{flakeMoves()}</div>
         </div>
+      <div className='flex-2 collumn'>
+          <h3 className='flex-centered'>Create your History</h3>
+          <div className=''>{historyIntro()}</div>
+        </div>
       </div>
-      <div className='flex'>{historyIntro()}</div>
       <div><button onClick={handleButtonClicked}>{`Create Character`}</button></div>
-      <div className='flex-4'>{hoverGear}</div> {/* This bit is where the description will go */}
+      <div className='flex-4 container-description'>{hoverGear}</div> {/* This bit is where the description will go */}
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import SpellSlinger from './characterTypes/SpellSlinger.js';
+import Choosen from './characterTypes/Choosen.js';
 import Flake from './characterTypes/Flake.js';
+import SpellSlinger from './characterTypes/SpellSlinger.js';
 
 export default function CreateCharacter({setBackend}) {
   const [hunterType, setHunterType] = useState('');
@@ -35,8 +36,9 @@ export default function CreateCharacter({setBackend}) {
           ))}
         </select>
       </div>
-      {hunterType === '10' && (<SpellSlinger setBackend={setBackend} hunterType={hunterType} name={name}/>)}
       {hunterType === '5' && (<Flake setBackend={setBackend} hunterType={hunterType} name={name}/>)}
+      {hunterType === '1' && (<Choosen setBackend={setBackend} hunterType={hunterType} name={name}/>)}
+      {hunterType === '10' && (<SpellSlinger setBackend={setBackend} hunterType={hunterType} name={name}/>)}
     </div>
   )
 }

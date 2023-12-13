@@ -28,6 +28,10 @@
 .flex {
   display: flex;
 }
+.flex-centered {
+  display: flex;
+  justify-content: center;
+}
 .flex-2 {
   flex: 2;
 }
@@ -66,13 +70,15 @@
 }
 
 .container-description {
-  text-align: center;
-  min-height: 100px;
-  max-width: 500px;
+  min-height: 200px;
 }
 
 .input-intro {
+  resize: none;
   min-height: 100px;
-  width: 500px;
-  min-width: 300px;
+  min-width: 290px;
+}
+.collumn {
+  /* border: 1px solid; */
+  min-width: 370px;
 }

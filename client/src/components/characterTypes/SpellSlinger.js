@@ -432,25 +432,28 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
       {basicDropDown("Look", "look", hunterLook, handleDropDownChange)}
       {basicDropDown("Features", "feature", hunterFeatures, handleDropDownChange)}
       {specialGearDropdown(hunterGear)}
-      {handleRatingDropdown('test')}
+      {handleRatingDropdown()}
 
       <div className='flex'>
-        <div className='flex-2'>
-          <h3 className='flex margin-left'>Combat magic, pick three (with at least one base)</h3>
-          <div className='flex margin-left text-bold'>Base Magic:</div>
+        <div className='flex-2 collumn'>
+          <h3 className='flex-centered'>Combat magic (pick three)</h3>
+          <div className='flex margin-left text-bold'>Base Magic (at least one):</div>
           <div>{magicBases()}</div>
           <div className='flex margin-left text-bold'>Effects:</div>
           <div>{magicEffects()}</div>
         </div>
-        <div className='flex-2'>
-          <h3 className='flex margin-left'>You get four Spell-slinger moves.</h3>
+        <div className='flex-2 collumn'>
+          <h3 className='flex-centered'>Spell-slinger moves (pick 3 more)</h3>
           <div className='flex margin-left text-bold'>Pick three more...</div>
           <div>{spellSlingerMoves()}</div>
         </div>
+        <div className='flex-2 collumn'>
+          <h3 className='flex-centered'>Create your History</h3>
+          <div className=''>{historyIntro()}</div>
+        </div>
       </div>
-      <div  className='flex'>{historyIntro()}</div>
       <div><button onClick={handleButtonClicked}>{`Create Character`}</button></div>
-      <div className='flex-4'>{hoverMagic}</div>
+      <div className='flex-4 container-description'>{hoverMagic}</div>
     </div>
   )
 }
