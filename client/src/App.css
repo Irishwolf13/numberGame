@@ -1,3 +1,4 @@
+
 .App {
   text-align: center;
 }
@@ -81,4 +82,124 @@
 .collumn {
   /* border: 1px solid; */
   min-width: 370px;
+}
+.art-character {
+  min-width: 200px;
+  max-width: 250px
+}
+
+
+/* ******************************* GRID LAYOUT ******************************* */
+.grid-container {
+  display: grid;
+  gap: 10px;
+  margin: 10px;
+}
+.grid-top,
+.grid-mid,
+.grid-bottom {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.grid-top {
+  height: 65px;
+}
+.grid-mid {
+  height: 500px; 
+}
+.grid-bottom {
+  height: 100px; 
+}
+
+.grid-1, 
+.grid-2,  
+.grid-3,  
+.grid-4, 
+.grid-5,
+.grid-6,  
+.grid-7,  
+.grid-8,
+.grid-9 {
+  position: relative;
+  min-width: 300px;
+  border: solid 1px black
+}
+/* ******************************* GRID 1 ******************************* */
+.line1,
+.line2,
+.line3 {
+  position: absolute;
+  left: 10px;
+}
+.line1 {
+  top: 0px;
+}
+.line2 {
+  top: 20px;
+}
+.line3 {
+  top: 40px;
+}
+.level {
+  position: absolute;
+  right: 10px;
+  top: 30%;
+}
+/* ******************************* GRID 2 ******************************* */
+/* ******************************* GRID 3 ******************************* */
+/* ******************************* GRID 4 ******************************* */
+.grid-4 {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 450px;
+}
+.Top, .Bottom {
+  flex: 1; /* Takes up half the space each */
+}
+.Top {
+  display: flex;
+}
+.Left{
+  flex: 1; /* Takes up half the space within .Top */
+}
+.Right {
+  flex: 1; /* Takes up the space within its parent container */
+  display: flex; /* Enables flexbox on the container */
+  justify-content: center; /* Centers children vertically if flex-direction is column */
+  flex-direction: column; /* Stack children vertically */
+}
+.art-character {
+  height: auto;
+}
+.attribute-holder {
+  display: flex; /* Enable flexbox layout */
+  justify-content: space-between; /* Space between items */
+  align-items: center; /* Align items vertically in the center */
+}
+.round {
+  width: 40px;     /* or any other size */
+  height: 40px;    /* should be same as width for a perfect circle */
+  border-radius: 50%;
+  border: solid black 1px;    /* optional, in case you don't want a border */
+  background-color: #ffffff; /* or any other color */
+  color: rgb(0, 0, 0);    /* text color */
+  text-align: center;
+  line-height: 40px; /* vertical alignment for single-line text */
+  font-size: 16px;  /* optional, depending on your design */
+  margin-right: 20px;
+}
+/* Adjustments to remove default styles on mobile devices (webkit) */
+.round::-moz-focus-inner {
+  border: 0;
+}
+.round:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+.roll-button {
+  margin-left: 20px;
+}
+.center-vertial {
+  width: 185px;
 }
