@@ -20,6 +20,7 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
     sharp:0,
     tough:0,
     weird:0,
+    level:1,
     introduction: '',
     history: '',
     image: spellSlingerImage

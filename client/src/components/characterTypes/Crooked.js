@@ -19,6 +19,7 @@ export default function Crooked({ setBackend, hunterType, name}) {
     sharp:0,
     tough:0,
     weird:0,
+    level:1,
     introduction: '',
     history: '',
     image: crooked1

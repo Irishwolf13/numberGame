@@ -15,7 +15,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [backend, setBackend] = useState([]);
-  const [currentCharater, setCurrentCharacter] = useState([]);
+  const [currentCharacter, setCurrentCharacter] = useState([]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -37,7 +37,7 @@ function App() {
         <Route path="/home" element={isAuthenticated ? <HomePage /> : <Navigate to="/login" replace />} />
         <Route path="/createCharacter" element={isAuthenticated ? <CreateCharacter setBackend={setBackend}/> : <Navigate to="/login" replace />} />
         <Route path="/selectCharacter" element={isAuthenticated ? <SelectCharacter backend={backend} setCurrentCharacter={setCurrentCharacter}/> : <Navigate to="/login" replace />} />
-        <Route path="/characterSheet" element={isAuthenticated ? <CharacterSheet currentCharater={currentCharater}/> : <Navigate to="/login" replace />} />
+        <Route path="/characterSheet" element={isAuthenticated ? <CharacterSheet currentCharacter={currentCharacter}/> : <Navigate to="/login" replace />} />
         
         <Route path="/login" element={!isAuthenticated ? <LogInPage /> : <Navigate to="/home" replace />} />
         <Route path="/signup" element={!isAuthenticated ? <SignUpPage /> : <Navigate to="/home" replace />} />
