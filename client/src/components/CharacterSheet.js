@@ -5,14 +5,16 @@ import spellSlinger from '../images/spellSlinger.jpg'
 import flake1 from '../images/flake1.jpg'
 
 export default function CharacterSheet({ currentCharacter }) {
-  const [experienceChecks, setExperienceChecks] = useState([false, false, false, false, false]);
+  const [experienceChecks, setExperienceChecks] = useState([]);
+  const [luckChecks, setLuckChecks] = useState([]);
+  const [harmChecks, setHarmChecks] = useState([]);
   const showButton = experienceChecks.every((checked) => checked);
   
   useEffect(() => {
-    console.log(currentCharacter)
-    return () => {
-      // Cleanup code
-    };
+    if (currentCharacter.experience) setExperienceChecks(currentCharacter.experience)
+    if (currentCharacter.luckChecks) setLuckChecks(currentCharacter.luckChecks)
+    if (currentCharacter.harmChecks) setHarmChecks(currentCharacter.harmChecks)
+
   }, [currentCharacter]);
 
   const hunterImages = {
@@ -40,9 +42,9 @@ export default function CharacterSheet({ currentCharacter }) {
     // Additional level up logic goes here...
   };
 
-  const toggleCheckbox = (index) => () => {
-    setExperienceChecks(experienceChecks.map((checked, i) => (i === index ? !checked : checked)));
-  };
+  const toggleChecks = (index, setter, myArray) => () => {
+    setter(myArray.map((checked, i) => (i === index ? !checked : checked)));
+  }
 
   return (
     <div>
@@ -69,27 +71,27 @@ export default function CharacterSheet({ currentCharacter }) {
               <div className='Right'>
                 <div className='center-vertial'>
                   <div className='attribute-holder'>
-                    <div className="round">{currentCharacter?.charm}</div>
+                    <div className="round">{currentCharacter?.charm > 0 ? `+${currentCharacter.charm}` : currentCharacter?.charm}</div>
                     <p>Charm</p>
                     <button className='roll-button' onClick={(e) => rollDice(e, 'charm')}>Roll</button>
                   </div>
                   <div className='attribute-holder'>
-                    <div className="round">{currentCharacter?.cool}</div>
+                    <div className="round">{currentCharacter?.cool > 0 ? `+${currentCharacter.cool}` : currentCharacter?.cool}</div>
                     <p>Cool</p>
                     <button className='roll-button'>Roll</button>
                   </div>
                   <div className='attribute-holder'>
-                    <div className="round">{currentCharacter?.sharp}</div>
+                    <div className="round">{currentCharacter?.sharp > 0 ? `+${currentCharacter.sharp}` : currentCharacter?.sharp}</div>
                     <p>Sharp</p>
                     <button className='roll-button'>Roll</button>
                   </div>
                   <div className='attribute-holder'>
-                    <div className="round">{currentCharacter?.tough}</div>
+                  <div className="round">{currentCharacter?.tough > 0 ? `+${currentCharacter.tough}` : currentCharacter?.tough}</div>
                     <p>Tough</p>
                     <button className='roll-button'>Roll</button>
                   </div>
                   <div className='attribute-holder'>
-                    <div className="round">{currentCharacter?.weird}</div>
+                  <div className="round">{currentCharacter?.weird > 0 ? `+${currentCharacter.weird}` : currentCharacter?.weird}</div>
                     <p>Weird</p>
                     <button className='roll-button'>Roll</button>
                   </div>
@@ -97,16 +99,17 @@ export default function CharacterSheet({ currentCharacter }) {
               </div>
             </div>
             <div className='Bottom'>
-              <div className=''>
+              <div>
                 <div>Experience</div>
                 <div className='flex-centered'>
                   <div className='container-experience'>
                     {experienceChecks.map((checked, index) => (
                       <input
-                        key={index}
+                        className='checkbox-medium'
+                        key={`experience-${index}`}
                         type="checkbox"
                         checked={checked}
-                        onChange={toggleCheckbox(index)}
+                        onChange={toggleChecks(index, setExperienceChecks, experienceChecks)}
                       />
                     ))}
                   </div>
@@ -115,11 +118,41 @@ export default function CharacterSheet({ currentCharacter }) {
                   </button>
                 </div>
               </div>
-              <div>
+              <div className='margin-10'>
                 <div>Luck</div>
+                <div className='flex-centered'>
+                  <div className='margin-right-10'>Okay</div>
+                  <div>
+                    {luckChecks.map((checked, index) => (
+                      <input
+                        className='checkbox-medium accent-green'
+                        key={`luck-${index}`}
+                        type="checkbox"
+                        checked={checked}
+                        onChange={toggleChecks(index, setLuckChecks, luckChecks)}
+                      />
+                    ))}
+                  </div>
+                  <div className='margin-left-10'>Doomed</div>
+                </div>
               </div>
               <div>
                 <div>Harm</div>
+                <div className='flex-centered'>
+                  <div className='margin-right-10'>Okay</div>
+                  <div>
+                    {harmChecks.map((checked, index) => (
+                      <input
+                        className='checkbox-medium accent-red'
+                        key={`harm-${index}`}
+                        type="checkbox"
+                        checked={checked}
+                        onChange={toggleChecks(index, setHarmChecks, harmChecks)}
+                      />
+                    ))}
+                  </div>
+                  <div className='margin-left-10'>Dying</div>
+                </div>
               </div>
             </div>
           </div>

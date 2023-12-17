@@ -12,6 +12,9 @@ const initialCharacterState = {
   magic: {},
   moves: {},
   fate: {},
+  experience: [false, false, false, false, false],
+  luckChecks: [false, false, false, false, false, false, false],
+  harmChecks: [false, false, false, false, false, false, false],
   charm: 0,
   cool: 0,
   sharp: 0,
@@ -20,7 +23,7 @@ const initialCharacterState = {
   level: 1,
   introduction: '',
   history: '',
-  image: '', // Placeholder, set this to choosen1 or whatever initial value you need
+  image: '', // Placeholder
 };
 
 // Custom hook for character state

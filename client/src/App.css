@@ -42,6 +42,15 @@
 .margin-right-small {
   margin-right: 5px;
 }
+.margin-10 {
+  margin: 10px;
+}
+.margin-right-10 {
+  margin-right: 10px
+}
+.margin-left-10 {
+  margin-left: 10px
+}
 .margin-left {
   margin-left: 5px;
 }
@@ -106,7 +115,7 @@
   height: 65px;
 }
 .grid-mid {
-  height: 500px; 
+  height: 480px; 
 }
 .grid-bottom {
   height: 100px; 
@@ -173,7 +182,7 @@
   flex-direction: column; /* Stack children vertically */
 }
 .art-character {
-  height: auto;
+  height: 300px;
 }
 .attribute-holder {
   display: flex; /* Enable flexbox layout */
@@ -213,4 +222,18 @@
 }
 .container-experience {
   margin-left: 70px;
+}
+.checkbox-medium {
+  /* Option 1: Increase size directly */
+  width: 15px; /* Adjust as needed */
+  height: 15px; /* Adjust as needed */
+  
+  /* Option 2: Scale the element */
+  transform: scale(1.3); /* Adjust scaling factor as needed */
+}
+.accent-green {
+  accent-color: rgb(0, 144, 0);
+}
+.accent-red {
+  accent-color: rgb(148, 0, 0);
 }
