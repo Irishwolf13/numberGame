@@ -33,19 +33,31 @@ export default function CharacterSheet({ currentCharacter }) {
   };
   const characterImageSrc = hunterImages[currentCharacter.hunterType] || comingSoon;
 
-  const rollDice = (e, frank) => {
-    console.log(currentCharacter)
-  }
-  
   const handleLevelUp = () => {
     setExperienceChecks([false, false, false, false, false]);
     // Additional level up logic goes here...
   };
-
+  
   const toggleChecks = (index, setter, myArray) => () => {
     setter(myArray.map((checked, i) => (i === index ? !checked : checked)));
   }
-
+  
+  const AttributeHolder = ({ attribute, label, onRoll }) => {
+    return (
+      <div className='attribute-holder'>
+        <div className="round">
+          {attribute > 0 ? `+${attribute}` : attribute}
+        </div>
+        <p>{label}</p>
+        <button className='roll-button' onClick={onRoll}>Roll</button>
+      </div>
+    );
+  }
+  const rollDice = (e, type) => {
+    console.log(currentCharacter)
+    console.log(type)
+  }
+  
   return (
     <div>
       <div className="grid-container">
@@ -69,33 +81,13 @@ export default function CharacterSheet({ currentCharacter }) {
                 <img className='art-character' src={characterImageSrc} alt="Character Image" />
               </div>
               <div className='Right'>
-                <div className='center-vertial'>
-                  <div className='attribute-holder'>
-                    <div className="round">{currentCharacter?.charm > 0 ? `+${currentCharacter.charm}` : currentCharacter?.charm}</div>
-                    <p>Charm</p>
-                    <button className='roll-button' onClick={(e) => rollDice(e, 'charm')}>Roll</button>
-                  </div>
-                  <div className='attribute-holder'>
-                    <div className="round">{currentCharacter?.cool > 0 ? `+${currentCharacter.cool}` : currentCharacter?.cool}</div>
-                    <p>Cool</p>
-                    <button className='roll-button'>Roll</button>
-                  </div>
-                  <div className='attribute-holder'>
-                    <div className="round">{currentCharacter?.sharp > 0 ? `+${currentCharacter.sharp}` : currentCharacter?.sharp}</div>
-                    <p>Sharp</p>
-                    <button className='roll-button'>Roll</button>
-                  </div>
-                  <div className='attribute-holder'>
-                  <div className="round">{currentCharacter?.tough > 0 ? `+${currentCharacter.tough}` : currentCharacter?.tough}</div>
-                    <p>Tough</p>
-                    <button className='roll-button'>Roll</button>
-                  </div>
-                  <div className='attribute-holder'>
-                  <div className="round">{currentCharacter?.weird > 0 ? `+${currentCharacter.weird}` : currentCharacter?.weird}</div>
-                    <p>Weird</p>
-                    <button className='roll-button'>Roll</button>
-                  </div>
-                </div>
+              <div className='center-vertical'>
+                <AttributeHolder attribute={currentCharacter?.charm} label="Charm" onRoll={(e) => rollDice(e, 'charm')} />
+                <AttributeHolder attribute={currentCharacter?.cool} label="Cool" onRoll={(e) => rollDice(e, 'cool')} />
+                <AttributeHolder attribute={currentCharacter?.sharp} label="Sharp" onRoll={(e) => rollDice(e, 'sharp')} />
+                <AttributeHolder attribute={currentCharacter?.tough} label="Tough" onRoll={(e) => rollDice(e, 'tough')} />
+                <AttributeHolder attribute={currentCharacter?.weird} label="Weird" onRoll={(e) => rollDice(e, 'weird')} />
+              </div>
               </div>
             </div>
             <div className='Bottom'>
@@ -153,6 +145,16 @@ export default function CharacterSheet({ currentCharacter }) {
                   </div>
                   <div className='margin-left-10'>Dying</div>
                 </div>
+              </div>
+              <div>
+                <label>Unstable </label>
+                <input
+                  className='checkbox-medium accent-black'
+                  key={`unstable`}
+                  type="checkbox"
+                  checked={harmChecks.filter(Boolean).length > 3}
+                  readOnly
+                />
               </div>
             </div>
           </div>
