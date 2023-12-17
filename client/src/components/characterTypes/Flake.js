@@ -1,28 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import useCharacter from '../customHooks/useCharacter'
 import flake1 from '../../images/flake1.jpg';
 import { useNavigate } from 'react-router-dom';
 
 export default function Flake({ setBackend, hunterType, name}) {
   const navigate = useNavigate();
-  const [current, setCurrent] = useState({
-    hunterType: '',
-    name: '',
-    gender: '',
-    look: '',
-    feature: '',
-    gear: {},
-    magic: {},
-    moves: {},
-    charm:0,
-    cool:0,
-    sharp:0,
-    tough:0,
-    weird:0,
-    level:1,
-    introduction: '',
-    history: '',
-    image: flake1
-  });
+  const [current, setCurrent] = useCharacter(flake1);
+
   useEffect(() => {
     setCurrent((prevState) => ({
       ...prevState,

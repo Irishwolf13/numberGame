@@ -1,30 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import useCharacter from '../customHooks/useCharacter'
 import choosen1 from '../../images/choosen1.jpg';
 import { useNavigate } from 'react-router-dom';
 
 export default function Choosen({ setBackend, hunterType, name}) {
   const navigate = useNavigate();
-  const [current, setCurrent] = useState({
-    hunterType: '',
-    name: '',
-    gender: '',
-    look: '',
-    feature: '',
-    hunterFate:'',
-    gear: {},
-    magic: {},
-    moves: {},
-    fate: {},
-    charm:0,
-    cool:0,
-    sharp:0,
-    tough:0,
-    weird:0,
-    level:1,
-    introduction: '',
-    history: '',
-    image: choosen1
-  });
+  const [current, setCurrent] = useCharacter(choosen1);
+  
   useEffect(() => {
     setCurrent((prevState) => ({
       ...prevState,

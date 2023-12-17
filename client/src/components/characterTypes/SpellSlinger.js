@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import useCharacter from '../customHooks/useCharacter'
 import spellSlingerImage from '../../images/spellSlinger.jpg';
 
 import { useNavigate } from 'react-router-dom';
@@ -6,25 +7,8 @@ import { useNavigate } from 'react-router-dom';
 export default function SpellSlinger({ setBackend, hunterType, name}) {
   const navigate = useNavigate();
   const myGenders = ["Woman", "Man", "Androgynous"]
-  const [current, setCurrent] = useState({
-    hunterType: '',
-    name: '',
-    gender: '',
-    look: '',
-    feature: '',
-    gear: {},
-    magic: {},
-    move: {},
-    charm:0,
-    cool:0,
-    sharp:0,
-    tough:0,
-    weird:0,
-    level:1,
-    introduction: '',
-    history: '',
-    image: spellSlingerImage
-  });
+  const [current, setCurrent] = useCharacter(spellSlingerImage);
+
   useEffect(() => {
     setCurrent((prevState) => ({
       ...prevState,

@@ -129,6 +129,7 @@
 .line1,
 .line2,
 .line3 {
+  display: flex;
   position: absolute;
   left: 10px;
 }
@@ -142,6 +143,7 @@
   top: 40px;
 }
 .level {
+  display: flex;
   position: absolute;
   right: 10px;
   top: 30%;
@@ -202,4 +204,13 @@
 }
 .center-vertial {
   width: 185px;
+}
+.characterName,
+.hunterType {
+  font-weight: bold;
+  font-size: large;
+  margin-top: 4px;
+}
+.container-experience {
+  margin-left: 70px;
 }
