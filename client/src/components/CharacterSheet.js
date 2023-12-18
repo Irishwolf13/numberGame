@@ -78,18 +78,33 @@ export default function CharacterSheet({ currentCharacter }) {
     console.log(type)
   }
 
-  function renderGearItems(gear) {
-    if (!gear) return null;
-  
-    return Object.values(gear).map((item, index) => (
-      <div className='flex margin-left' key={index}>
-        {item.name && <div className='margin-right-small'> {item.name}: </div>}
-        {item.harm !== 0 && <div className='margin-right-small'>Harm+{item.harm}</div>}
-        {item.distance && <div className='margin-right-small'> {item.distance} </div>}
-        {item.subtle && <div className='margin-right-small'> {item.subtle} </div>}
-        {item.sounds && <div className='margin-right-small'> {item.sounds} </div>}
-      </div>
-    ));
+  // Going to break down the main weapon created in the first bit here...
+  const renderGearItems = (gear) => {
+    if (currentCharacter.hunterType === 'The Chosen') {
+      return Object.values(gear).map((item, index) => (
+        <div className='flex margin-left' key={index}>
+          {item.name && <div className='margin-right-small'> {item.name}: </div>}
+          {item.harm !== 0 && <div className='margin-right-small'>Harm+{item.harm}</div>}
+          {item.distance && <div className='margin-right-small'> {item.distance} </div>}
+          {item.subtle && <div className='margin-right-small'> {item.subtle} </div>}
+          {item.sounds && <div className='margin-right-small'> {item.sounds} </div>}
+          {item.armor && <div className='margin-right-small'> {`+${item.armor} Armor`}</div>}
+        </div>
+      ));
+    }else {
+      if (!gear) return null;
+    
+      return Object.values(gear).map((item, index) => (
+        <div className='flex margin-left' key={index}>
+          {item.name && <div className='margin-right-small'> {item.name}: </div>}
+          {item.harm !== 0 && <div className='margin-right-small'>Harm+{item.harm}</div>}
+          {item.distance && <div className='margin-right-small'> {item.distance} </div>}
+          {item.subtle && <div className='margin-right-small'> {item.subtle} </div>}
+          {item.sounds && <div className='margin-right-small'> {item.sounds} </div>}
+          {item.armor && <div className='margin-right-small'> {`+${item.armor} Armor`}</div>}
+        </div>
+      ));
+    }
   }
   
   return (

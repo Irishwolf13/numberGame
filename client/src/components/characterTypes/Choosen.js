@@ -22,15 +22,17 @@ export default function Choosen({ setBackend, hunterType, name}) {
   const [selectedGear, setSelectedGear] = useState(new Set());
   const [selectedGear2, setSelectedGear2] = useState(new Set());
   const [selectedGear3, setSelectedGear3] = useState(new Set());
+  const [selectedGear4, setSelectedGear4] = useState(new Set());
   const [selectedFate, setSelectedFate] = useState(new Set());
   useEffect(() => {
     const combinedGearSelection = {
       ...selectedGear,
       ...selectedGear2,
-      ...selectedGear3
+      ...selectedGear3,
+      ...selectedGear4
     };
     setCurrent(previous => ({ ...previous, gear: combinedGearSelection }));
-  }, [selectedGear, selectedGear2, selectedGear3]);
+  }, [selectedGear, selectedGear2, selectedGear3, selectedGear4]);
 
   const myGenders = ["Woman", "Man", "Girl", "Boy", "Androgynous"]
   const hunterFeatures = ["Fresh Face", "Haggard Face", "Young Face", "Haunted Face", "Hopeful Face", "Controlled Face", ]
@@ -80,6 +82,7 @@ export default function Choosen({ setBackend, hunterType, name}) {
     {heroic:false, name:"The source of Evil",description:`The source of Evil`},
   ]
   const hunterGearMaterial = [{name:"Steel",description: '',harm:0},{name:"Cold Iron",description: '',harm:0},{name:"Silver",description: '',harm:0},{name:"Wood",description: '',harm:0},{name:"Stone",description: '',harm:0},{name:"Bone",description: '',harm:0},{name:"Teeth",description: '',harm:0},{name:"Obsidian",description: '',harm:0},{name:"Other",description: '',harm:0},]
+  const hunterProtectiveGear = [{name:"Protective Gear",description: '',harm:0,armor:1}]
   const myIntroductionGuidence = `Introduce your
   Choosen by name and look, and tell the group what they
   know about you.`
@@ -202,6 +205,9 @@ export default function Choosen({ setBackend, hunterType, name}) {
     if (myKey === 'matts') {
       description = hunterGearMaterial.find(gear => gear.name === name);
     }
+    if (myKey === 'protective') {
+      description = hunterProtectiveGear.find(gear => gear.name === name);
+    }
 
     let updatedSelection = { ...myObject };
 
@@ -299,6 +305,31 @@ export default function Choosen({ setBackend, hunterType, name}) {
             />
             <label htmlFor={`base-material-${index}`} className={`no-wrap flex${myObject.name in selectedGear3 ? ' text-bold' : ''}`}> 
               {<span className='margin-right'>{`${myObject.name}`}</span>}
+            </label>
+          </div>
+        </div>
+      ))}
+    </>
+  }
+  const gearProtective = () => {
+    return <>
+      {hunterProtectiveGear.map((myObject, index) => (
+        <div key={index} className='flex-2'>
+          <div 
+            className={`margin-right-small no-wrap flex `}
+          >
+            <input
+              className='flex margin-right-small'
+              type="checkbox"
+              id={`protetive-${index}`}
+              name={myObject.name}
+              value={myObject.name}
+              onChange={(e) => handleCheckboxChange(e, selectedGear4, setSelectedGear4, 'protective')}
+              checked={myObject.name in selectedGear4} 
+              disabled={!((myObject.name in selectedGear4) || Object.keys(selectedGear4).length < 1)} 
+            />
+            <label htmlFor={`protetive-${index}`} className={`no-wrap flex${myObject.name in selectedGear4 ? ' text-bold' : ''}`}> 
+              {<span className='margin-right'>{`Yes I am afriad and need ${myObject.name}.`}</span>}
             </label>
           </div>
         </div>
@@ -433,6 +464,8 @@ export default function Choosen({ setBackend, hunterType, name}) {
           <div>{gearBusinessEnd()}</div>
           <div className='flex margin-left text-bold'>Matterial (choose 1):</div>
           <div>{gearMaterial()}</div>
+          <div className='flex margin-left text-bold'>Protective Gear:</div>
+          <div>{gearProtective()}</div>
         </div>
         <div className='flex-2 collumn'>
           <h3 className='flex-centered'>Pick Three Choosen Moves</h3>
