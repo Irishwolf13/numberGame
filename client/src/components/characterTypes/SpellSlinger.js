@@ -204,7 +204,6 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
     setCurrent((prevState) => ({
       ...prevState,
       gear: {
-        ...prevState.gear, // Preserve existing content of 'gear', if necessary
         [selectedGear.name]: selectedGear
       }
     }));

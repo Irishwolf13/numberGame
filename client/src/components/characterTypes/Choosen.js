@@ -79,7 +79,7 @@ export default function Choosen({ setBackend, hunterType, name}) {
     {heroic:false, name:"The end of days",description:`The end of days`},
     {heroic:false, name:"The source of Evil",description:`The source of Evil`},
   ]
-  const hunterGearMaterial = [{name:"Steel"},{name:"Cold Iron"},{name:"Silver"},{name:"Wood"},{name:"Stone"},{name:"Bone"},{name:"Teeth"},{name:"Obsidian"},{name:"Other"},]
+  const hunterGearMaterial = [{name:"Steel",description: '',harm:0},{name:"Cold Iron",description: '',harm:0},{name:"Silver",description: '',harm:0},{name:"Wood",description: '',harm:0},{name:"Stone",description: '',harm:0},{name:"Bone",description: '',harm:0},{name:"Teeth",description: '',harm:0},{name:"Obsidian",description: '',harm:0},{name:"Other",description: '',harm:0},]
   const myIntroductionGuidence = `Introduce your
   Choosen by name and look, and tell the group what they
   know about you.`
@@ -199,6 +199,9 @@ export default function Choosen({ setBackend, hunterType, name}) {
     if (myKey === 'fate') {
       description = myFate.find(fate => fate.name === name);
     }
+    if (myKey === 'matts') {
+      description = hunterGearMaterial.find(gear => gear.name === name);
+    }
 
     let updatedSelection = { ...myObject };
 
@@ -290,7 +293,7 @@ export default function Choosen({ setBackend, hunterType, name}) {
               id={`base-material-${index}`}
               name={myObject.name}
               value={myObject.name}
-              onChange={(e) => handleCheckboxChange(e, selectedGear3, setSelectedGear3, 'gear')}
+              onChange={(e) => handleCheckboxChange(e, selectedGear3, setSelectedGear3, 'matts')}
               checked={myObject.name in selectedGear3} 
               disabled={!((myObject.name in selectedGear3) || Object.keys(selectedGear3).length < 1)} 
             />

@@ -9,6 +9,26 @@ export default function CharacterSheet({ currentCharacter }) {
   const [luckChecks, setLuckChecks] = useState([]);
   const [harmChecks, setHarmChecks] = useState([]);
   const showButton = experienceChecks.every((checked) => checked);
+  // const standardMoves = [
+  //   { name: 'Manipulate Someone',
+  //     description:`Once you have given them a reason, tell them what you want them to do and roll +Charm.\n
+  //     For a normal person:\n
+  //     • On a 10+, then they’ll do it for the reason you gave them. If you asked too much, they’ll tell you the minimum it would take for them to do it (or if there’s no way they’d do it).\n
+  //     • On a 7-9, they’ll do it, but only if you do something for them right now to show that you mean it. If you asked too much, they’ll tell you what, if anything, it would take for them to do it.\n
+  //     • Advanced: On a 12+ not only do they do what you want right now, they also become your ally for the rest of the mystery (or, if you do enough for them, permanently).\n
+  //     For another hunter:\n
+  //     • On a 10+, if they do what you ask they mark experience and get +1 forward.\n
+  //     • On a 7-9, they mark experience if they do what you ask.\n
+  //     • On a miss, it’s up to that hunter to decide how badly you offend or annoy them. They mark experience if they decide not to do what you asked. Monsters and minions cannot normally be manipulated.\n
+  //     • Advanced: On a 12+ they must act under pressure to resist your request. If they do what you ask, they mark one experience and take +1 ongoing while doing what you asked. `
+  //   },
+  //   { name: 'Act Under Pressure',
+  //     description:`When you act under pressure, roll+Cool.\n
+  //     On a 10+ you do what you set out to.\n
+  //     On a 7-9 the Keeper is going to giveyou a worse outcome, hard choice, orprice to pay. \n
+  //     Advanced: On a 12+ you may choose to either do what you wanted and something extra, or to do what you wanted to absolute perfection.`
+  //   },
+  // ] 
   
   useEffect(() => {
     if (currentCharacter.experience) setExperienceChecks(currentCharacter.experience)
@@ -56,6 +76,20 @@ export default function CharacterSheet({ currentCharacter }) {
   const rollDice = (e, type) => {
     console.log(currentCharacter)
     console.log(type)
+  }
+
+  function renderGearItems(gear) {
+    if (!gear) return null;
+  
+    return Object.values(gear).map((item, index) => (
+      <div className='flex margin-left' key={index}>
+        {item.name && <div className='margin-right-small'> {item.name}: </div>}
+        {item.harm !== 0 && <div className='margin-right-small'>Harm+{item.harm}</div>}
+        {item.distance && <div className='margin-right-small'> {item.distance} </div>}
+        {item.subtle && <div className='margin-right-small'> {item.subtle} </div>}
+        {item.sounds && <div className='margin-right-small'> {item.sounds} </div>}
+      </div>
+    ));
   }
   
   return (
@@ -158,7 +192,21 @@ export default function CharacterSheet({ currentCharacter }) {
               </div>
             </div>
           </div>
-          <div className="grid-5"></div>
+          <div className="grid-5">
+          <div>
+            <div className='text-bold'>Gear</div>
+            <div>
+              {renderGearItems(currentCharacter.gear)}
+            </div>
+            </div>
+            <div>
+              <div>Standard Moves</div>
+              {/* Render Standard moves here */}
+            </div>
+            <div>
+              <div>Hunter Moves</div>
+            </div>
+          </div>
           <div className="grid-6"></div>
         </div>
         <div className='grid-bottom'>
