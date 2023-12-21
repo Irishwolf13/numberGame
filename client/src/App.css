@@ -2,6 +2,15 @@
 .App {
   text-align: center;
 }
+.moveTitles {
+  font-size: large;
+  margin-bottom: 5px;
+  text-decoration: underline;
+}
+.pointer {
+  cursor: pointer;
+  caret-color: transparent;
+}
 .loading-container {
   display: flex;
   justify-content: center; /* Center horizontally */
@@ -28,6 +37,22 @@
 }
 .flex {
   display: flex;
+}
+.autoMargin {
+  margin-left: auto;
+  margin-right: auto;
+}
+.flex-warp {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 380px;
+}
+.flex-50 {
+  /* text-align: left; */
+  box-sizing: border-box;
+  width: calc(50% - 10px); 
+  margin-right: 5px;
+  margin-left: 5px;  
 }
 .flex-centered {
   display: flex;
@@ -132,7 +157,7 @@
 .grid-9 {
   position: relative;
   min-width: 300px;
-  border: solid 1px black
+  border: solid 1px black;
 }
 /* ******************************* GRID 1 ******************************* */
 .line1,
@@ -241,3 +266,32 @@
 .accent-black {
   accent-color: rgb(0, 0, 0);
 }
+
+/* ******************************* GRID 5 ******************************* */
+.grid-5 {
+  min-width: 380px;
+}
+/* ******************************* GRID 6 ******************************* */
+.grid-6 {
+  /* background-color: aqua; */
+  /* Define the width and/or height as necessary */
+  width: 100%; /* Example width */
+  overflow: hidden; /* This will hide any overflow. Use 'auto' to add scrollbars if needed */
+}
+
+.description-box {
+  margin: 10px;
+  padding: 10px;
+  height: 400px; /* Example height */
+  border: 2px solid black;
+  text-align: left;
+  white-space: pre-wrap;
+  max-width: 100%; /* Ensure the box does not grow beyond the width of .grid-6 */
+  max-height: 100%; /* Ensure the box does not grow beyond the height of .grid-6 */
+  overflow: auto; /* Add scrollbars inside .description-box if content overflows */
+}
+/* ******************************* GRID 7 ******************************* */
+
+/* ******************************* GRID 8 ******************************* */
+
+/* ******************************* GRID 9 ******************************* */

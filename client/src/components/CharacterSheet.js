@@ -8,29 +8,51 @@ export default function CharacterSheet({ currentCharacter }) {
   const [experienceChecks, setExperienceChecks] = useState([]);
   const [luckChecks, setLuckChecks] = useState([]);
   const [harmChecks, setHarmChecks] = useState([]);
+  const [currentDescription, setCurrentDescription] = useState(`Click on item to see description.`);
+  const [currentDescriptionName, setCurrentDescriptionName] = useState('');
+  const [currentDescriptionRoll, setCurrentDescriptionRoll] = useState('');
   const showButton = experienceChecks.every((checked) => checked);
-  // const standardMoves = [
-  //   { name: 'Manipulate Someone',
-  //     description:`Once you have given them a reason, tell them what you want them to do and roll +Charm.\n
-  //     For a normal person:\n
-  //     • On a 10+, then they’ll do it for the reason you gave them. If you asked too much, they’ll tell you the minimum it would take for them to do it (or if there’s no way they’d do it).\n
-  //     • On a 7-9, they’ll do it, but only if you do something for them right now to show that you mean it. If you asked too much, they’ll tell you what, if anything, it would take for them to do it.\n
-  //     • Advanced: On a 12+ not only do they do what you want right now, they also become your ally for the rest of the mystery (or, if you do enough for them, permanently).\n
-  //     For another hunter:\n
-  //     • On a 10+, if they do what you ask they mark experience and get +1 forward.\n
-  //     • On a 7-9, they mark experience if they do what you ask.\n
-  //     • On a miss, it’s up to that hunter to decide how badly you offend or annoy them. They mark experience if they decide not to do what you asked. Monsters and minions cannot normally be manipulated.\n
-  //     • Advanced: On a 12+ they must act under pressure to resist your request. If they do what you ask, they mark one experience and take +1 ongoing while doing what you asked. `
-  //   },
-  //   { name: 'Act Under Pressure',
-  //     description:`When you act under pressure, roll+Cool.\n
-  //     On a 10+ you do what you set out to.\n
-  //     On a 7-9 the Keeper is going to giveyou a worse outcome, hard choice, orprice to pay. \n
-  //     Advanced: On a 12+ you may choose to either do what you wanted and something extra, or to do what you wanted to absolute perfection.`
-  //   },
-  // ] 
+  const standardMoves = [
+    { name: 'Manipulate Someone',
+      description:`Once you have given them a reason, tell them what you want them to do and roll +Charm.\n\nFor a normal person:\n\n• On a 10+, then they’ll do it for the reason you gave them. If you asked too much, they’ll tell you the minimum it would take for them to do it (or if there’s no way they’d do it).\n\n• On a 7-9, they’ll do it, but only if you do something for them right now to show that you mean it. If you asked too much, they’ll tell you what, if anything, it would take for them to do it.\n\n• Advanced: On a 12+ not only do they do what you want right now, they also become your ally for the rest of the mystery (or, if you do enough for them, permanently).\nFor another hunter:\n\n• On a 10+, if they do what you ask they mark experience and get +1 forward.\n\n• On a 7-9, they mark experience if they do what you ask.\n\n• On a miss, it’s up to that hunter to decide how badly you offend or annoy them. They mark experience if they decide not to do what you asked. Monsters and minions cannot normally be manipulated.\n\n• Advanced: On a 12+ they must act under pressure to resist your request. If they do what you ask, they mark one experience and take +1 ongoing while doing what you asked. `,
+      roll: '+Charm'
+    },
+    { name: 'Act Under Pressure',
+      description:`When you act under pressure.\n\nOn a 10+ you do what you set out to.\nOn a 7-9 the Keeper is going to giveyou a worse outcome, hard choice, orprice to pay. \n\nAdvanced: On a 12+ you may choose to either do what you wanted and something extra, or to do what you wanted to absolute perfection.`,
+      roll: '+Cool'
+    },
+    { name: 'Help Out',
+      description:`When you help another hunter.\n\nOn a 10+ your help grants them +1 to their roll.\nOn a 7-9 your help grants them +1 to their roll, but you also expose yourself to trouble or danger.\n\nAdvanced: On a 12+ your help lets them act as if they just rolled a 12, regardless of what they actually got.`,
+      roll: '+Cool'
+    },
+    { name: 'Investigate a Mystery',
+      description:`When you investigate a mystery.\n\nOn a 10+ receive 2 Hold\nOn a 7-9 receive 1.\n\nOne hold can be spent to ask the Keeper one of the following questions:\n• What happened here?\n• What sort of creature is it?\n• What can it do?\n• What can hurt it?\n• Where did it go?\n• What was it going to do?\n• What is being concealed here?\n\nAdvanced: On a 12+, you may ask the Keeper any question you want about the mystery, not just the listed ones.`,
+      roll: '+Sharp'
+    },
+    { name: 'Read a Bad Situtation',
+      description:`When you look around and read a bad situation.\n\nOn a 10+ recieve 3 Hold\nOn a 7-9, receive 1 Hold.\n\nOne hold can be spent to ask the Keeper one of the following questions:\n• What’s my best way in?\n• What’s my best way out?\n• Are there any dangers we haven’t noticed?\n• What’s the biggest threat?\n• What’s most vulnerable to me?\n• What’s the best way to protect the\nvictims?\n\nIf you act on the answers, you get +1 ongoing while the information is relevant.\n\nAdvanced: On a 12+ you may ask the Keeper any question you want about the situation, not just the listed ones.`,
+      roll: '+Sharp'
+    },
+    { name: 'Kick Some Ass',
+      description:`When you get into a fight and kick some ass.\n\nOn a 7+, you and whatever you’re fighting inflict harm on each other. The amount of harm is based on the established dangers in the game. That usually means you inflict the harm rating of your weapon and your enemy inflicts their attack’s harm rating on you.\n\nOn a 10+, choose one extra effect:\n• You gain the advantage: take +1 forward, or give +1 forward to another hunter.\n• You inflict terrible harm (+1 harm).\n• You suffer less harm (-1 harm).\n• You force them where you want them.\n\nAdvanced: On a 12+ instead pick an enhanced effect:\n• You completely hold the advantage. All hunters involved in the fight get +1 forward.\n• You suffer no harm at all.\n• Your attack inflicts double the normal harm.\n• Your attack drives the enemy away in a rout.`,
+      roll: '+Tough'
+    },
+    { name: 'Protect Someone',
+      description:`When you prevent harm to another character.\n\nOn a 7+, you protect them okay, but you’ll suffer some or all of the harm they were going to get.\n\nOn a 10+ choose an extra:\n• You suffer little harm (-1 harm).\n• All impending danger is now focused on you.\n• You inflict harm on the enemy.\n• You hold the enemy back.\n\nAdvanced: on a 12+ both you and the character you are protecting are unharmed and out of danger. If you were protecting a bystander, they also become your ally.`,
+      roll: '+Tough'
+    },
+    { name: 'Use Magic',
+      description:`When you use magic, say what you’re trying to achieve and how you do the spell.\n\nOn a 10+, the magic works without issues: choose your effect.\nOn a 7-9, it works imperfectly: choose your effect and a glitch. The Keeper will decide what effect the glitch has. advanced: On a 12+ the Keeper will offer you some added benefit.\n\nEffects\n• Inflict harm (1-harm ignorearmour magic obvious).\n• Enchant a weapon. It gets +1 harm and +magic.\n• Do one thing that is beyond human limitations.\n• Bar a place or portal to a specific person or a type of creature.\n• Trap a specific person, minion, or monster.\n• Banish a spirit or curse from the person, object, or place it inhabits.\n• Summon a monster into the world.\n• Communicate with something that you do not share a language with.\n• Observe another place or time.\n• Heal 1-harm from an injury, or cure a disease, or neutralize a poison.\n\nGlitches\n• The effect is weakened.\n• The effect is of short duration.\n• You take 1-harm ignore-armour.\n• The magic draws immediate, unwelcome attention.\n• It has a problematic side effect.`,
+      roll: '+Weird'
+    },
+    { name: 'BIG MAGIC',
+      description:`Use this when you want more than the Use Magic effects. Tell the Keeper what you want to do.\n\nThe Keeper may require:\n• You need to spend a lot of time (days or weeks) researching the magic ritual.\n• You need to experiment with the spell – there will be lots of failures before you get it right.\n• You need some rare and weird ingredients and supplies.\n• The spell will take a long time (hours or days) to cast.\n• You need a lot of people (2, 3, 7, 13, or more) to help.\n• The spell needs to be cast at a particular place and/or time.\n• You need to use magic as part of the ritual, perhaps to summon a monster, communicate with something, or bar the portal you opened.\n• It will have a specific side-effect or danger.\n\nIf you meet the requirements, then the magic takes effect.`,
+      roll: 'Ask Keeper'
+    },
+  ] 
   
   useEffect(() => {
+    console.log(currentCharacter)
     if (currentCharacter.experience) setExperienceChecks(currentCharacter.experience)
     if (currentCharacter.luckChecks) setLuckChecks(currentCharacter.luckChecks)
     if (currentCharacter.harmChecks) setHarmChecks(currentCharacter.harmChecks)
@@ -82,9 +104,17 @@ export default function CharacterSheet({ currentCharacter }) {
   const renderGearItems = (gear) => {
     if (currentCharacter.hunterType === 'The Chosen') {
       return Object.values(gear).map((item, index) => (
-        <div className='flex margin-left' key={index}>
-          {item.name && <div className='margin-right-small'> {item.name}: </div>}
-          {item.harm !== 0 && <div className='margin-right-small'>Harm+{item.harm}</div>}
+        <div 
+          className='flex-centered pointer' 
+          key={index}
+          onClick={() => {
+            setCurrentDescriptionName('Your Gear');
+            setCurrentDescription('This is a list of your gear.');
+            setCurrentDescriptionRoll('');
+          }}
+        >
+          {item.name && <div className='margin-right-small'> {item.name} </div>}
+          {item.harm !== 0 && <div className='margin-right-small'>+{item.harm} Harm,</div>}
           {item.distance && <div className='margin-right-small'> {item.distance} </div>}
           {item.subtle && <div className='margin-right-small'> {item.subtle} </div>}
           {item.sounds && <div className='margin-right-small'> {item.sounds} </div>}
@@ -95,9 +125,9 @@ export default function CharacterSheet({ currentCharacter }) {
       if (!gear) return null;
     
       return Object.values(gear).map((item, index) => (
-        <div className='flex margin-left' key={index}>
+        <div className='flex-centered' key={index}>
           {item.name && <div className='margin-right-small'> {item.name}: </div>}
-          {item.harm !== 0 && <div className='margin-right-small'>Harm+{item.harm}</div>}
+          {item.harm !== 0 && <div className='margin-right-small'>+{item.harm} Harm,</div>}
           {item.distance && <div className='margin-right-small'> {item.distance} </div>}
           {item.subtle && <div className='margin-right-small'> {item.subtle} </div>}
           {item.sounds && <div className='margin-right-small'> {item.sounds} </div>}
@@ -106,6 +136,47 @@ export default function CharacterSheet({ currentCharacter }) {
       ));
     }
   }
+
+  const renderStandardMoves = () => {
+    return standardMoves.map((item, index) => (
+      <div 
+        className='pointer'
+        key={`standard-move-${index}`}
+        onClick={() => handleCurrentDescriptionSelection(item)}
+      >
+        {item.name && <div className=''>{item.name}</div>}
+      </div>
+    ));
+  }
+
+  const handleCurrentDescriptionSelection = (item) => {
+    setCurrentDescription(item.description);
+    setCurrentDescriptionName(item.name);
+    if (item.roll) {
+      setCurrentDescriptionRoll(item.roll);
+    } else {
+      setCurrentDescriptionRoll('');
+    }
+  }
+
+  const renderHunterMoves = (currentCharacter) => {
+    if (!currentCharacter || !currentCharacter.moves || typeof currentCharacter.moves !== 'object') return null;
+  
+    return Object.values(currentCharacter.moves).map((item, index) => (
+      <div 
+        className='pointer'
+        key={`standard-move-${index}`}
+        onClick={() => handleCurrentDescriptionSelection(item)}
+      >
+        {item.name}
+      </div>
+    ));
+  };
+  
+  // Usage in JSX:
+  <div>
+    {renderHunterMoves(currentCharacter)}
+  </div>
   
   return (
     <div>
@@ -209,20 +280,31 @@ export default function CharacterSheet({ currentCharacter }) {
           </div>
           <div className="grid-5">
           <div>
-            <div className='text-bold'>Gear</div>
-            <div>
+            <div className='text-bold moveTitles'>Gear</div>
               {renderGearItems(currentCharacter.gear)}
             </div>
-            </div>
-            <div>
-              <div>Standard Moves</div>
-              {/* Render Standard moves here */}
-            </div>
-            <div>
-              <div>Hunter Moves</div>
+            <div className="flex">
+              <div className='flex-2'>
+                <p className='text-bold moveTitles'>Standard Moves</p>
+                {renderStandardMoves(standardMoves)} 
+              </div>
+              <div className='flex-2'>
+                <p className='text-bold moveTitles'>{`${currentCharacter.hunterType} Moves`}</p>
+                {renderHunterMoves(currentCharacter)} 
+              </div>
+              <div className=''>
+              </div>
             </div>
           </div>
-          <div className="grid-6"></div>
+          <div className="grid-6">
+            <div className='text-bold'>{currentDescriptionName === '' ? 'Description' : currentDescriptionName}</div>
+            <div className='description-box'>
+              <div>
+                { currentDescriptionRoll !== '' && ( <div className='text-bold'>{`Roll: ${currentDescriptionRoll}`}</div> ) }
+                { currentDescription }
+              </div>
+            </div>
+          </div>
         </div>
         <div className='grid-bottom'>
           <div className="grid-7"></div>

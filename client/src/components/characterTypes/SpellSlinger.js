@@ -312,7 +312,7 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
               id={`spell-move-${index}`}
               name={move.name}
               value={move.name}
-              onChange={(e) => handleCheckboxChange(e, selectedMove, setSelectedMove, 'move')}
+              onChange={(e) => handleCheckboxChange(e, selectedMove, setSelectedMove, 'moves')}
               checked={move.name in selectedMove} 
               disabled={!((move.name in selectedMove) || Object.keys(selectedMove).length < 4)}
             />
