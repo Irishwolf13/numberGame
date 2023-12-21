@@ -11,6 +11,9 @@ export default function CharacterSheet({ currentCharacter }) {
   const [currentDescription, setCurrentDescription] = useState(`Click on item to see description.`);
   const [currentDescriptionName, setCurrentDescriptionName] = useState('');
   const [currentDescriptionRoll, setCurrentDescriptionRoll] = useState('');
+  const [historyText, setHistoryText] = useState('')
+  const [notesText, setNotesText] = useState(``)
+  const [improvements, setImprovements] = useState([])
   const showButton = experienceChecks.every((checked) => checked);
   const standardMoves = [
     { name: 'Manipulate Someone',
@@ -52,11 +55,11 @@ export default function CharacterSheet({ currentCharacter }) {
   ] 
   
   useEffect(() => {
-    console.log(currentCharacter)
     if (currentCharacter.experience) setExperienceChecks(currentCharacter.experience)
     if (currentCharacter.luckChecks) setLuckChecks(currentCharacter.luckChecks)
     if (currentCharacter.harmChecks) setHarmChecks(currentCharacter.harmChecks)
-
+    if (currentCharacter.history) setHistoryText(currentCharacter.history)
+    if (currentCharacter.notes) setNotesText(currentCharacter.notes)
   }, [currentCharacter]);
 
   const hunterImages = {
@@ -77,7 +80,11 @@ export default function CharacterSheet({ currentCharacter }) {
 
   const handleLevelUp = () => {
     setExperienceChecks([false, false, false, false, false]);
-    // Additional level up logic goes here...
+    // I think here I'd like to add a modal, with selections of what you can do for improvement.
+    // It would have to read what level you are, because every five levels you can choose advanaced improvement
+    // Going to use setImprovements to auto update the improvements box.
+    // Eventually, it should save to the backend when choosen.
+    setImprovements(prevImprovements => [...prevImprovements, 'Level up improvement']);
   };
   
   const toggleChecks = (index, setter, myArray) => () => {
@@ -248,12 +255,13 @@ export default function CharacterSheet({ currentCharacter }) {
     );
   };
   
+  // <div>
+  //   {renderHunterMoves(currentCharacter)}
+  // </div>
   
-  // Usage in JSX:
-  <div>
-    {renderHunterMoves(currentCharacter)}
-  </div>
-  
+  const changeTextboxText = (event, setter) => {
+    setter(event.target.value);
+  };
   return (
     <div>
       <div className="grid-container">
@@ -396,9 +404,30 @@ export default function CharacterSheet({ currentCharacter }) {
           </div>
         </div>
         <div className='grid-bottom'>
-          <div className="grid-7"></div>
-          <div className="grid-8"></div>
-          <div className="grid-9"></div>
+          <div className="grid-7">
+            <div className='intro-box-text'>History</div>
+            <textarea 
+              className='introduction-box'
+              value={historyText}
+              onChange={e => changeTextboxText(e, setHistoryText)} // You pass the function reference directly
+            ></textarea>
+          </div>
+          <div className="grid-8">
+            <div className='intro-box-text'>Notes</div>
+            <textarea 
+              className='introduction-box'
+              value={notesText}
+              onChange={e => changeTextboxText(e, setNotesText)} // You pass the function reference directly
+            ></textarea>
+          </div>
+          <div className="grid-9">
+          <div className='intro-box-text'>Improvements</div>
+            <textarea 
+              className='introduction-box'
+              value={improvements.join('\n')}
+              readOnly={true}
+            ></textarea>
+          </div>
         </div>
       </div>
     </div>

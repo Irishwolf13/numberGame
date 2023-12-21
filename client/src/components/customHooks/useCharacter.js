@@ -21,8 +21,10 @@ const initialCharacterState = {
   tough: 0,
   weird: 0,
   level: 1,
-  introduction: '',
-  history: '',
+  improvments: [],
+  introduction: ``,
+  history: ``,
+  notes:``,
   image: '', // Placeholder
 };
 
