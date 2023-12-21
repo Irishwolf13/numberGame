@@ -99,6 +99,11 @@ export default function CharacterSheet({ currentCharacter }) {
     console.log(currentCharacter)
     console.log(type)
   }
+  const setBasicDescription = (name, description) => {
+    setCurrentDescriptionName(name);
+    setCurrentDescription(description);
+    setCurrentDescriptionRoll('');
+  }
 
   // Going to break down the main weapon created in the first bit here...
   const renderGearItems = (gear) => {
@@ -108,9 +113,7 @@ export default function CharacterSheet({ currentCharacter }) {
           className='flex-centered pointer' 
           key={index}
           onClick={() => {
-            setCurrentDescriptionName('Your Gear');
-            setCurrentDescription('This is a list of your gear.');
-            setCurrentDescriptionRoll('');
+            setBasicDescription('Your Gear','This is a list of your gear.');
           }}
         >
           {item.name && <div className='margin-right-small'> {item.name} </div>}
@@ -212,7 +215,11 @@ export default function CharacterSheet({ currentCharacter }) {
             </div>
             <div className='Bottom'>
               <div>
-                <div>Experience</div>
+                <div
+                  className='pointer' 
+                  onClick={() => {setBasicDescription('Experience',`Mark an experience point whenever your roll totals six or less, or when a move tells you to.\n\nWhenever you mark the fifth experience box, level up. Erase all five marks and choose an improvement from your list.\n\nAfter you have levelled up five times, you may choose from the advanced improvement list as well.`);}}>
+                  Experience
+                </div>
                 <div className='flex-centered'>
                   <div className='container-experience'>
                     {experienceChecks.map((checked, index) => (
@@ -231,7 +238,11 @@ export default function CharacterSheet({ currentCharacter }) {
                 </div>
               </div>
               <div className='margin-10'>
-                <div>Luck</div>
+                <div
+                  className='pointer' 
+                  onClick={() => {setBasicDescription('Luck',`When you spend a point of Luck, pick one:\n   • Decrease a wound you have suffered to 0 harm.\n   • After you roll, retroactively change the result to a 12.\n\nWhen you have no luck left, bad things will happen to you.`);}}>
+                  Luck
+                </div>
                 <div className='flex-centered'>
                   <div className='margin-right-10'>Okay</div>
                   <div>
@@ -249,7 +260,11 @@ export default function CharacterSheet({ currentCharacter }) {
                 </div>
               </div>
               <div>
-                <div>Harm</div>
+                <div
+                  className='pointer' 
+                  onClick={() => {setBasicDescription(`Harm`,`Whenever you suffer harm, the Keeper will tell you what effect it has.\n\nInjury severity depends on how much harm you have suffered:\n• 0-harm wounds have only minor, short term effects.\n• 4-7 harm wounds are serious and unstable. They will get worse unless treated. Mark the “Unstable” box.\n• 8-harm or more will kill a normal human, including a hunter.\n\nArmour reduces the harm suffered by the number of points it is rated for.\nMonsters may not be defeated until you use their weakness against them, and this applies to some minions as well.`)}}>
+                  Harm
+                </div>
                 <div className='flex-centered'>
                   <div className='margin-right-10'>Okay</div>
                   <div>
