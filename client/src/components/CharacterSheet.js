@@ -175,6 +175,79 @@ export default function CharacterSheet({ currentCharacter }) {
       </div>
     ));
   };
+
+  const renderConditionalContent = (currentCharacter) => {
+    if (currentCharacter.hunterType === 'The Chosen') {
+      return (
+        <div className='flex-2'>
+          <p className='text-bold moveTitles'>{`${currentCharacter.hunterType}'s Fate`}</p>
+          {renderChoosenFate(currentCharacter)} 
+        </div>
+      );
+    }
+    if (currentCharacter.hunterType === 'The Spell-Slinger') {
+      return (
+        <div className='flex-2'>
+          <p className='text-bold'>{``}</p>
+          {renderSpellSlingerMagic(currentCharacter)} 
+        </div>
+      );
+    }
+    return null;
+  };
+  const renderChoosenFate = (currentCharacter) => {
+    if (!currentCharacter || !currentCharacter.fate || typeof currentCharacter.fate !== 'object') return null;
+    const heroicChoices = Object.values(currentCharacter.fate).filter(item => item.heroic);
+    const nonHeroicChoices = Object.values(currentCharacter.fate).filter(item => !item.heroic);
+  
+    return (
+      <>
+        <div className='heroic'>
+          <div className='text-bold'>-- Heroic --</div>
+          {heroicChoices.map((item, index) => (
+            <div className='pointer' key={`heroic-move-${index}`} onClick={() => handleCurrentDescriptionSelection(item)}>
+              {item.name}
+            </div>
+          ))}
+        </div>
+        <div className='non-heroic'>
+          <div className='text-bold'>-- Doom --</div>
+          {nonHeroicChoices.map((item, index) => (
+            <div  className='pointer' key={`non-heroic-move-${index}`} onClick={() => handleCurrentDescriptionSelection(item)}>
+              {item.name}
+            </div>
+          ))}
+        </div>
+      </>
+    );
+  };
+  const renderSpellSlingerMagic = (currentCharacter) => {
+    if (!currentCharacter || !currentCharacter.magic || typeof currentCharacter.magic !== 'object') return null;
+    const baseMagic = Object.values(currentCharacter.magic).filter(item => item.base);
+    const nonBaseMagic = Object.values(currentCharacter.magic).filter(item => !item.base);
+  
+    return (
+      <>
+        <div className='magic'>
+          <div className='text-bold'>-- Base Magic --</div>
+          {baseMagic.map((item, index) => (
+            <div className='pointer' key={`magic-move-${index}`} onClick={() => handleCurrentDescriptionSelection(item)}>
+              {item.name}
+            </div>
+          ))}
+        </div>
+        <div className='non-magic'>
+          <div className='text-bold'>-- Effects --</div>
+          {nonBaseMagic.map((item, index) => (
+            <div  className='pointer' key={`non-magic-move-${index}`} onClick={() => handleCurrentDescriptionSelection(item)}>
+              {item.name}
+            </div>
+          ))}
+        </div>
+      </>
+    );
+  };
+  
   
   // Usage in JSX:
   <div>
@@ -224,7 +297,7 @@ export default function CharacterSheet({ currentCharacter }) {
                   <div className='container-experience'>
                     {experienceChecks.map((checked, index) => (
                       <input
-                        className='checkbox-medium'
+                        className='checkbox-medium pointer'
                         key={`experience-${index}`}
                         type="checkbox"
                         checked={checked}
@@ -232,7 +305,7 @@ export default function CharacterSheet({ currentCharacter }) {
                       />
                     ))}
                   </div>
-                  <button className='margin-left' onClick={handleLevelUp} style={{ visibility: showButton ? 'visible' : 'hidden' }}>
+                  <button className='margin-left pointer' onClick={handleLevelUp} style={{ visibility: showButton ? 'visible' : 'hidden' }}>
                     Level Up
                   </button>
                 </div>
@@ -248,7 +321,7 @@ export default function CharacterSheet({ currentCharacter }) {
                   <div>
                     {luckChecks.map((checked, index) => (
                       <input
-                        className='checkbox-medium accent-green'
+                        className='checkbox-medium accent-green pointer'
                         key={`luck-${index}`}
                         type="checkbox"
                         checked={checked}
@@ -270,7 +343,7 @@ export default function CharacterSheet({ currentCharacter }) {
                   <div>
                     {harmChecks.map((checked, index) => (
                       <input
-                        className='checkbox-medium accent-red'
+                        className='checkbox-medium accent-red pointer'
                         key={`harm-${index}`}
                         type="checkbox"
                         checked={checked}
@@ -306,6 +379,7 @@ export default function CharacterSheet({ currentCharacter }) {
               <div className='flex-2'>
                 <p className='text-bold moveTitles'>{`${currentCharacter.hunterType} Moves`}</p>
                 {renderHunterMoves(currentCharacter)} 
+                {renderConditionalContent(currentCharacter)}
               </div>
               <div className=''>
               </div>

@@ -42,7 +42,8 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
       distance:'close',
       armor:0, 
       subtle:'obvious', 
-      sounds:'loud'
+      sounds:'loud',
+      description:'2-harm magic close obvious loud'
     },
     {base:true, 
       name: 'Ball', 
@@ -51,7 +52,8 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
       distance:'area close',
       armor:0, 
       subtle:'obvious', 
-      sounds:'loud'
+      sounds:'loud',
+      description:'1-harm magic area close obvious loud'
     },
     {base:true, 
       name: 'Missile', 
@@ -60,7 +62,8 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
       distance:'far',
       armor:0,
       subtle:'obvious',
-      sounds:'loud'
+      sounds:'loud',
+      description:'1-harm magic far obvious loud'
     },
     {base:true,
       name: 'Wall',
@@ -69,84 +72,74 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
       distance:'barrier',
       armor:1,
       subtle:'obvious',
-      sounds:'loud'},
+      sounds:'loud',
+      description:'1-harm magic barrier close 1-armour obvious loud'},
     {base:false,
       name: 'Fire',
       type:'effect',
       harm:2,
       armor:0,
-      effects:'If you get a 10+ on a combat magic roll, the fire won’t spread'
+      description:'If you get a 10+ on a combat magic roll, the fire won’t spread'
     },
     {base:false,
       name: 'Force or Wind',
       type:'effect',
       harm:1,
       armor:1,
-      effects:'Add “+1 harm forceful” to a base, or “+1 armour” to a wall'
+      description:'Add “+1 harm forceful” to a base, or “+1 armour” to a wall'
     },
     {base:false,
       name: 'Lightning or Entropy',
       type:'effect',
       harm:1,
       armor:0,
-      effects:'Add “+1 harm messy” to a base'},
+      description:'Add “+1 harm messy” to a base'},
     {base:false,
       name: 'Frost or Ice',
       type:'effect',
       harm:1,
       armor:2,
-      effects:'Adds “-1 harm +2 armour” to a wall, or “+1 harm restraining” to other bases'
+      description:'Adds “-1 harm +2 armour” to a wall, or “+1 harm restraining” to other bases'
     },
     {base:false,
       name: 'Earth',
       type:'effect',
       harm:0,
       armor:0,
-      effects:'Add “forceful restraining” to a base'
+      description:'Add “forceful restraining” to a base'
     },
     {base:false,
       name: 'Necromantic',
       type:'effect',
       harm:0,
       armor:0,
-      effects:'Add “life-drain” to a base'
+      description:'Add “life-drain” to a base'
     },
   ]
   const myIntroductionGuidence = `Introduce your
   Spell-slinger by name and look, and tell the group what
   they know about you.`
-  const myHistoryGuidence = `Pick one for
-  each of the other hunters:
-  • They act as your conscience when the power goes
-  to your head. Ask them about the last time this happened.
-  • Blood relation, though you were out of contact for
-  years. Ask them how they reconnected with you.
-  • Mentor from another life. Ask them what they
-  taught you.
-  • Your magic-fueled rescue of them introduced them
-  to the supernatural. Tell them what creature was
-  after them.
-  • An old rivalry has turned into a tight friendship. Tell
-  them what you once fought over.
-  • You thought they were dead, and now they’re back.
-  What “killed” them?
-  • They’re an on-again/off-again love interest. Ask
-  them what keeps you apart. Tell them what keeps
-  you together.
-  • A comrade-in-arms. You’ve faced the biggest threats
-  together.`
+  const myHistoryGuidence = `Pick one for each of the other hunters:
+  • They act as your conscience when the power goes to your head. Ask them about the last time this happened.
+  • Blood relation, though you were out of contact for years. Ask them how they reconnected with you.
+  • Mentor from another life. Ask them what they taught you.
+  • Your magic-fueled rescue of them introduced them to the supernatural. Tell them what creature was after them.
+  • An old rivalry has turned into a tight friendship. Tell them what you once fought over.
+  • You thought they were dead, and now they’re back. What “killed” them?
+  • They’re an on-again/off-again love interest. Ask them what keeps you apart. Tell them what keeps you together.
+  • A comrade-in-arms. You’ve faced the biggest threats together.`
   const magicMoves = [
-    {name:'Tools and Techniques', description:`Tools and Techniques: To use your combat magic effectively, you rely on a collection of tools and techniques. Cross off one; you’ll need the rest.\n\n• Consumables: You need certain supplies— powders, oils, etc—on hand, some will be used up each cast. If you don’t have them, take 1-harm ignore-armour when you cast.\n\n• Foci: You need wands, staves, and other obvious props to focus. If you don’t have what you need, your combat magic does 1 less harm.\n\n• Gestures: You need to wave your hands around to use combat magic. If you’re restrained, take -1 ongoing for combat magic.\n\n• Incantations: You must speak in an arcane language to control your magic. If you use combat magic without speaking, act under pressure to avoid scrambling your thoughts.`},
+    {name:'Tools and Techniques', description:`To use your combat magic effectively, you rely on a collection of tools and techniques.\nCross off one; you’ll need the rest.\n\n• Consumables: You need certain supplies— powders, oils, etc—on hand, some will be used up each cast. If you don’t have them, take 1-harm ignore-armour when you cast.\n\n• Foci: You need wands, staves, and other obvious props to focus. If you don’t have what you need, your combat magic does 1 less harm.\n\n• Gestures: You need to wave your hands around to use combat magic. If you’re restrained, take -1 ongoing for combat magic.\n\n• Incantations: You must speak in an arcane language to control your magic. If you use combat magic without speaking, act under pressure to avoid scrambling your thoughts.`},
     {name:'Advanced Arcane Training', description:'If you have two of your three Tools and Techniques at the ready, you may ignore the third one.'},
-    {name:'Arcane Reputation', description:'Pick three big organizations or groups in the supernatural community, which can include some of the more sociable types of monsters. They’ve heard of you and respect your power. With affected humans, take +1 forward when you manipulate them. You may manipulate affected monsters as if they were human, with no bonus.'},
+    {name:'Arcane Reputation', description:'Pick three big organizations or groups in the supernatural community, which can include some of the more sociable types of monsters.  They’ve heard of you and respect your power.\n\nWith affected humans, take +1 forward when you manipulate them.\n\nYou may manipulate affected monsters as if they were human, with no bonus.'},
     {name:'Could have been worse', description:'When you miss a use magic roll you can choose one of the following options instead of losing control of the magic.\n\n• Fizzle: The preparations and materials for the spell are ruined. You’ll have to start over from scratch with the prep time doubled.\n• This Is Gonna Suck: The effect happens, but you trigger all of the listed glitches but one. You pick the one you avoid.'},
-    {name:'Enchated Clothing', description:'Pick an article of every-day clothing–it’s enchanted without any change in appearance. Take -1 harm from any source that tries to get at you through the garment.'},
-    {name:'Forensic Divination', description:'When you successfully investigate a mystery, you may ask “What magic was done here?” as a free extra question.'},
+    {name:'Enchated Clothing', description:'Pick an article of every-day clothing–it’s enchanted without any change in appearance.\n\nTake -1 harm from any source that tries to get at you through the garment.'},
+    {name:'Forensic Divination', description:'When you successfully investigate a mystery, as a free extra question you may ask\n\n“What magic was done here?”'},
     {name:'Go Big or Go Home',description:'When you must use magic as a requirement for Big Magic, take +1 ongoing to those use magic rolls.'},
     {name:'Noy my fault',description:'+1 to act under pressure when you are dealing with the consequences of your own spellcasting.'},
-    {name:'Practitioner',description:'Choose two effects available to you under use magic. Take +1 to use magic whenever you choose one of those effects.'},
-    {name:'Shield Spell',description:'When you protect someone, gain 2-armour against any harm that is transferred to you. This doesn’t stack with your other armour, if any'},
-    {name:'Third Eye',description:'When you read a bad situation, you can open up your third eye for a moment to take in extra information. Take +1 hold on any result of 7 or more, plus you can see invisible things. On a miss, you may still get 1 hold, but you’re exposed to supernatural danger. Unfiltered hidden reality is rough on the mind!'}]
+    {name:'Practitioner',description:'Choose two effects available to you under use magic.\n\nTake +1 to use magic whenever you choose one of those effects.'},
+    {name:'Shield Spell',description:'When you protect someone\n\nGain 2-armour against any harm that is transferred to you.\n\nThis doesn’t stack with your other armour, if any'},
+    {name:'Third Eye',description:'When you read a bad situation, you can open up your third eye for a moment to take in extra information.\n\nTake +1 hold on any result of 7 or more, plus you can see invisible things.\n\nOn a miss, you may still get 1 hold, but you’re exposed to supernatural danger. Unfiltered hidden reality is rough on the mind!'}]
 
   const handleDropDownChange = (event, mySetterKey) => {
     setCurrent((prevState) => ({
@@ -291,7 +284,7 @@ export default function SpellSlinger({ setBackend, hunterType, name}) {
       hoverText += `${magicObject.subtle} `;
       hoverText += `${magicObject.sounds} `;
     } else {
-      hoverText += `${magicObject.effects} `;
+      hoverText += `${magicObject.description} `;
     }
     
     setHoverMagic(hoverText.trimEnd());

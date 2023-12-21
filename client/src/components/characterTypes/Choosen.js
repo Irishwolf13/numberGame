@@ -83,24 +83,8 @@ export default function Choosen({ setBackend, hunterType, name}) {
   ]
   const hunterGearMaterial = [{name:"Steel",description: '',harm:0},{name:"Cold Iron",description: '',harm:0},{name:"Silver",description: '',harm:0},{name:"Wood",description: '',harm:0},{name:"Stone",description: '',harm:0},{name:"Bone",description: '',harm:0},{name:"Teeth",description: '',harm:0},{name:"Obsidian",description: '',harm:0},{name:"Other",description: '',harm:0},]
   const hunterProtectiveGear = [{name:"Protective Gear",description: '',harm:0,armor:1}]
-  const myIntroductionGuidence = `Introduce your
-  Choosen by name and look, and tell the group what they
-  know about you.`
-  const myHistoryGuidence = `Pick  one of
-  these for each other hunter:
-  • You are close blood relations. Ask them exactly how
-  close.
-  • They are destined to be your mentor. Tell them how
-  this was revealed.
-  • Your best friend in the world, who you trust totally.
-  • A rival at first, but you came to a working arrangement.
-  • Romantic entanglement, or fated to be romantically
-  entangled.
-  • Just friends, from school or work or something. Ask
-  them what.
-  • They could have been the Chosen One instead of you,
-  but they failed some trial. Tell them how they failed.
-  • You saved their life, back when they didn’t know monsters were real. Tell them what you saved them from.`
+  const myIntroductionGuidence = `Introduce your Choosen by name and look, and tell the group what they know about you.`
+  const myHistoryGuidence = `Pick  one of these for each other hunter:\n• You are close blood relations. Ask them exactly how close.\n• They are destined to be your mentor. Tell them how this was revealed.\n• Your best friend in the world, who you trust totally.\n• A rival at first, but you came to a working arrangement.\n• Romantic entanglement, or fated to be romantically entangled.\n• Just friends, from school or work or something. Ask them what.\n• They could have been the Chosen One instead of you, but they failed some trial. Tell them how they failed.\n• You saved their life, back when they didn’t know monsters were real. Tell them what you saved them from.`
   
   const myMoves = [
     {name:'Destiny’s Plaything', description:`At the beginning of each mystery, roll +Weird to see what is revealed about your immediate future. On a 10+, the Keeper will reveal a useful detail about the coming mystery. On a 7-9 you get a vague hint about it. On a miss, something bad is going to happen to you.`},
