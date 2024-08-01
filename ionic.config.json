@@ -1,0 +1,7 @@
+{
+  "name": "numberGame",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
