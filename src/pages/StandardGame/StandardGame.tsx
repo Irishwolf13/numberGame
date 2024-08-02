@@ -7,9 +7,9 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import './Home.css';
+import './StandardGame.css';
 
-const Home: React.FC = () => {
+const StandardGame: React.FC = () => {
   const [myNumbers, setMyNumbers] = useState([1, 2, 3, 4, 5]);
   const [clickedIndices, setClickedIndices] = useState<number[]>([]);
   const [currentAction, setCurrentAction] = useState<string | null>(null);
@@ -166,5 +166,5 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default StandardGame;
 
