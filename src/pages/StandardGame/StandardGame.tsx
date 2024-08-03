@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
+  IonBackButton,
   IonButton,
+  IonButtons,
   IonContent,
   IonHeader,
   IonPage,
@@ -126,35 +128,20 @@ const StandardGame: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
-          <IonTitle>Get That Number</IonTitle>
-        </IonToolbar>
+        <IonButtons><IonBackButton></IonBackButton></IonButtons>
       </IonHeader>
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Get That Number</IonTitle>
-          </IonToolbar>
-        </IonHeader>
         <div className='centerMe'>
-          {/* Random Number Circle */}
           <div className="circles-container">
             <div className="circle">{randomNumber}</div>
           </div>
-
-          {/* Selected Numbers and Action Circles */}
           <div className="circles-container">
             <div className="circle">{getCurrentDisplayValue(1)}</div>
             <div className="circle">{getCurrentDisplayValue(2)}</div>
             <div className="circle">{getCurrentDisplayValue(3)}</div>
           </div>
-
-          {/* Number Buttons */}
           <div>{renderNumberButtons()}</div>
-
-          {/* Action Buttons */}
           <div>{renderActionButtons()}</div>
-
           <IonButton onClick={applyChanges}>Calculate</IonButton>
         </div>
 
@@ -167,4 +154,3 @@ const StandardGame: React.FC = () => {
 };
 
 export default StandardGame;
-
