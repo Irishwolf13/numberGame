@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   IonBackButton,
   IonButton,
@@ -6,29 +7,34 @@ import {
   IonContent,
   IonHeader,
   IonPage,
-  IonTitle,
-  IonToolbar,
 } from '@ionic/react';
 import './StandardGame.css';
+import { RootState } from '../../store/store';
+import { setCurrentNumber } from '../../store/numberSlice';
 
 const StandardGame: React.FC = () => {
+  const dispatch = useDispatch();
+  const globalNumber = useSelector((state: RootState) => state.currentNumber.currentNumber?.number || 0);
+
   const [myNumbers, setMyNumbers] = useState([1, 2, 3, 4, 5]);
   const [clickedIndices, setClickedIndices] = useState<number[]>([]);
   const [currentAction, setCurrentAction] = useState<string | null>(null);
-  const [randomNumber, setRandomNumber] = useState<number>(0);
+  const [randomNumber, setRandomNumber] = useState<number>(globalNumber);
   const unreachableNumbers = [76, 79, 86, 92, 94, 97, 98];
   const actions = ['+', '-', '/', 'x'];
 
   useEffect(() => {
-    generateRandomNumber();
-  }, []);
+    setRandomNumber(globalNumber); // Set randomNumber to the global state number when the page loads
+  }, [globalNumber]);
 
   const generateRandomNumber = () => {
     let number;
     do {
       number = Math.floor(Math.random() * 101);
     } while (unreachableNumbers.includes(number));
-    setRandomNumber(number);
+    
+    dispatch(setCurrentNumber({ number })); // Update the global state with the new random number
+    setRandomNumber(number); // Update the local state with the new random number
   };
 
   const handleButtonClick = (num: number, index: number) => {
