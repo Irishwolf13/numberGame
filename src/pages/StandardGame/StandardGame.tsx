@@ -11,34 +11,35 @@ import {
 import './StandardGame.css';
 import { RootState } from '../../store/store';
 import { setCurrentNumber } from '../../store/numberSlice';
-import BouncingNumbers from '../../components/BouncingNumbers/BouncingNumbers'; // Import the new component
+import BouncingNumbers from '../../components/BouncingNumbers/BouncingNumbers'; 
 
 const StandardGame: React.FC = () => {
   const dispatch = useDispatch();
-  const globalNumber = useSelector((state: RootState) => state.currentNumber.currentNumber?.number || null);
-  const alreadyReached = [1]; // This will be retrieved from database at some point later...
+  const globalNumber = useSelector(
+    (state: RootState) => state.currentNumber.currentNumber?.number || null
+  );
+  const alreadyReached = [1]; 
   const [myNumbers, setMyNumbers] = useState([1, 2, 3, 4, 5]);
-  const [clickedIndices, setClickedIndices] = useState<number[]>([]);
+  const [firstSelectedIdx, setFirstSelectedIdx] = useState<number | null>(null);
+  const [secondSelectedIdx, setSecondSelectedIdx] = useState<number | null>(null);
   const [currentAction, setCurrentAction] = useState<string | null>(null);
   const [randomNumber, setRandomNumber] = useState<number | null>(globalNumber);
   const unreachableNumbers = [0, 76, 79, 86, 92, 94, 97, 98];
   const actions = ['+', '-', '/', 'x'];
 
   let numbersArray = Array.from({ length: 100 }, (_, i) => i + 1);
-  // Filter out both unreachable numbers and already reached numbers
   numbersArray = numbersArray.filter(
     (num) => !unreachableNumbers.includes(num) && !alreadyReached.includes(num)
   );
 
   const goToStandardGame = () => {
-    // Select random number from filtered Number array
     const randomIndex = Math.floor(Math.random() * numbersArray.length);
     const randomNumber = numbersArray[randomIndex];
     dispatch(setCurrentNumber({ number: randomNumber }));
   };
 
   useEffect(() => {
-    setRandomNumber(globalNumber); // Set randomNumber to the global state number when the page loads
+    setRandomNumber(globalNumber);
   }, [globalNumber]);
 
   const generateRandomNumber = () => {
@@ -46,28 +47,35 @@ const StandardGame: React.FC = () => {
     do {
       number = Math.floor(Math.random() * 101);
     } while (unreachableNumbers.includes(number));
-    
-    dispatch(setCurrentNumber({ number })); // Update the global state with the new random number
-    setRandomNumber(number); // Update the local state with the new random number
+
+    dispatch(setCurrentNumber({ number }));
+    setRandomNumber(number);
   };
 
   const handleButtonClick = (num: number, index: number) => {
-    if (clickedIndices.includes(index)) {
-      setClickedIndices(clickedIndices.filter((i) => i !== index));
-    } else if (clickedIndices.length < 2) {
-      setClickedIndices([...clickedIndices, index]);
+    if (index === firstSelectedIdx) {
+      setFirstSelectedIdx(null);
+    } else if (index === secondSelectedIdx) {
+      setSecondSelectedIdx(null);
+    } else if (firstSelectedIdx === null) {
+      setFirstSelectedIdx(index);
+    } else if (secondSelectedIdx === null) {
+      setSecondSelectedIdx(index);
     }
   };
 
   const handleActionButtonClick = (action: string) => {
-    setCurrentAction(action);
+    if (currentAction === action) {
+      setCurrentAction(null); // Deselect the action if it is already selected
+    } else {
+      setCurrentAction(action);
+    }
   };
 
   const applyChanges = () => {
-    if (currentAction !== null && clickedIndices.length === 2) {
-      const [firstIndex, secondIndex] = clickedIndices;
-      const firstNumber = myNumbers[firstIndex];
-      const secondNumber = myNumbers[secondIndex];
+    if (currentAction !== null && firstSelectedIdx !== null && secondSelectedIdx !== null) {
+      const firstNumber = myNumbers[firstSelectedIdx];
+      const secondNumber = myNumbers[secondSelectedIdx];
 
       let result: number;
       switch (currentAction) {
@@ -89,21 +97,22 @@ const StandardGame: React.FC = () => {
 
       const newMyNumbers = [...myNumbers];
 
-      // Remove elements from higher index first to avoid shifting issues
-      newMyNumbers.splice(Math.max(firstIndex, secondIndex), 1);
-      newMyNumbers.splice(Math.min(firstIndex, secondIndex), 1);
+      newMyNumbers.splice(Math.max(firstSelectedIdx, secondSelectedIdx), 1);
+      newMyNumbers.splice(Math.min(firstSelectedIdx, secondSelectedIdx), 1);
 
-      newMyNumbers.push(result); // Add the result to the array
+      newMyNumbers.push(result);
 
       setMyNumbers(newMyNumbers);
-      setClickedIndices([]); // Reset clicked indices after applying changes
-      setCurrentAction(null); // Reset current action after applying changes
+      setFirstSelectedIdx(null);
+      setSecondSelectedIdx(null);
+      setCurrentAction(null);
     }
   };
 
   const newNumber = () => {
     setMyNumbers([1, 2, 3, 4, 5]);
-    setClickedIndices([]);
+    setFirstSelectedIdx(null);
+    setSecondSelectedIdx(null);
     setCurrentAction(null);
     generateRandomNumber();
   };
@@ -113,7 +122,11 @@ const StandardGame: React.FC = () => {
       <IonButton
         key={`${num}-${index}`}
         onClick={() => handleButtonClick(num, index)}
-        color={clickedIndices.includes(index) ? 'success' : undefined}
+        color={
+          index === firstSelectedIdx || index === secondSelectedIdx
+            ? 'success'
+            : undefined
+        }
       >
         {num}
       </IonButton>
@@ -133,14 +146,14 @@ const StandardGame: React.FC = () => {
   };
 
   const getCurrentDisplayValue = (position: number) => {
-    if (position === 1 && clickedIndices.length > 0) {
-      return myNumbers[clickedIndices[0]];
+    if (position === 1 && firstSelectedIdx !== null) {
+      return myNumbers[firstSelectedIdx];
     }
     if (position === 2 && currentAction !== null) {
       return currentAction;
     }
-    if (position === 3 && clickedIndices.length > 1) {
-      return myNumbers[clickedIndices[1]];
+    if (position === 3 && secondSelectedIdx !== null) {
+      return myNumbers[secondSelectedIdx];
     }
     return '';
   };
@@ -150,25 +163,37 @@ const StandardGame: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonButtons><IonBackButton></IonBackButton></IonButtons>
+        <IonButtons>
+          <IonBackButton></IonBackButton>
+        </IonButtons>
       </IonHeader>
       <IonContent fullscreen>
         <BouncingNumbers numbersArray={numbersArray} />
-        <div className='centerMe'>
-          <div className="circles-container-spacer">
-            
-          </div>
+        <div className="centerMe">
+          <div className="circles-container-spacer"></div>
           <div className="circles-container">
-            <div className={`circle ${itemClass}`}>{getCurrentDisplayValue(1)}</div>
-            <div className={`circle ${itemClass}`}>{getCurrentDisplayValue(2)}</div>
-            <div className={`circle ${itemClass}`}>{getCurrentDisplayValue(3)}</div>
+            <div className={`circle ${itemClass}`}>
+              {getCurrentDisplayValue(1)}
+            </div>
+            <div className={`circle ${itemClass}`}>
+              {getCurrentDisplayValue(2)}
+            </div>
+            <div className={`circle ${itemClass}`}>
+              {getCurrentDisplayValue(3)}
+            </div>
           </div>
           <div className={itemClass}>{renderNumberButtons()}</div>
           <div className={itemClass}>{renderActionButtons()}</div>
-          <IonButton className={itemClass} onClick={applyChanges}>Calculate</IonButton>
+          <IonButton className={itemClass} onClick={applyChanges}>
+            Calculate
+          </IonButton>
         </div>
 
-        <IonButton expand="full" onClick={newNumber} className={`bottom-button showItem`}>
+        <IonButton
+          expand="full"
+          onClick={newNumber}
+          className={`bottom-button showItem`}
+        >
           New Number
         </IonButton>
       </IonContent>
