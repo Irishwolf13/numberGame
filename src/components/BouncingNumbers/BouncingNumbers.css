@@ -1,23 +1,52 @@
 .whiteBackground {
-    background-color: rgb(0, 0, 0);
-    height: 90%;
-    width: 100%;
-    color: rgb(0, 0, 0);
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .bouncingNumber {
-    position: absolute;
-    width: 5vh;
-    height: 5vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2.5vh;
-    font-weight: bold;
-    color: rgb(0, 0, 0);
-    background-color: rgb(255, 255, 255);
-    border-radius: 50%;
-    border: 1px solid black;
-  }
+  position: absolute;
+  background-color: rgb(0, 0, 0);
+  height: 90vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.bouncingNumber {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
+  border: 1px solid black;
+  width: var(--size);
+  height: var(--size);
+  font-size: calc(var(--size) / 2);
+}
+
+.centeredBall {
+  top: 10% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  transition: top 1s ease, left 1s ease, transform 1s ease !important;
+  width: 7vh;
+  height: 7vh;
+  z-index: 1000;
+}
+
+.cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.849);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hideCover {
+  z-index: -1;
+}
+
+.showCover {
+  z-index: 1;
+}

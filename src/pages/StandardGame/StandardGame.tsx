@@ -11,17 +11,31 @@ import {
 import './StandardGame.css';
 import { RootState } from '../../store/store';
 import { setCurrentNumber } from '../../store/numberSlice';
+import BouncingNumbers from '../../components/BouncingNumbers/BouncingNumbers'; // Import the new component
 
 const StandardGame: React.FC = () => {
   const dispatch = useDispatch();
-  const globalNumber = useSelector((state: RootState) => state.currentNumber.currentNumber?.number || 0);
-
+  const globalNumber = useSelector((state: RootState) => state.currentNumber.currentNumber?.number || null);
+  const alreadyReached = [1]; // This will be retrieved from database at some point later...
   const [myNumbers, setMyNumbers] = useState([1, 2, 3, 4, 5]);
   const [clickedIndices, setClickedIndices] = useState<number[]>([]);
   const [currentAction, setCurrentAction] = useState<string | null>(null);
-  const [randomNumber, setRandomNumber] = useState<number>(globalNumber);
-  const unreachableNumbers = [76, 79, 86, 92, 94, 97, 98];
+  const [randomNumber, setRandomNumber] = useState<number | null>(globalNumber);
+  const unreachableNumbers = [0, 76, 79, 86, 92, 94, 97, 98];
   const actions = ['+', '-', '/', 'x'];
+
+  let numbersArray = Array.from({ length: 100 }, (_, i) => i + 1);
+  // Filter out both unreachable numbers and already reached numbers
+  numbersArray = numbersArray.filter(
+    (num) => !unreachableNumbers.includes(num) && !alreadyReached.includes(num)
+  );
+
+  const goToStandardGame = () => {
+    // Select random number from filtered Number array
+    const randomIndex = Math.floor(Math.random() * numbersArray.length);
+    const randomNumber = numbersArray[randomIndex];
+    dispatch(setCurrentNumber({ number: randomNumber }));
+  };
 
   useEffect(() => {
     setRandomNumber(globalNumber); // Set randomNumber to the global state number when the page loads
@@ -131,27 +145,30 @@ const StandardGame: React.FC = () => {
     return '';
   };
 
+  const itemClass = randomNumber ? 'showItem' : 'hiddenItem';
+
   return (
     <IonPage>
       <IonHeader>
         <IonButtons><IonBackButton></IonBackButton></IonButtons>
       </IonHeader>
       <IonContent fullscreen>
+        <BouncingNumbers numbersArray={numbersArray} />
         <div className='centerMe'>
-          <div className="circles-container">
-            <div className="circle">{randomNumber}</div>
+          <div className="circles-container-spacer">
+            
           </div>
           <div className="circles-container">
-            <div className="circle">{getCurrentDisplayValue(1)}</div>
-            <div className="circle">{getCurrentDisplayValue(2)}</div>
-            <div className="circle">{getCurrentDisplayValue(3)}</div>
+            <div className={`circle ${itemClass}`}>{getCurrentDisplayValue(1)}</div>
+            <div className={`circle ${itemClass}`}>{getCurrentDisplayValue(2)}</div>
+            <div className={`circle ${itemClass}`}>{getCurrentDisplayValue(3)}</div>
           </div>
-          <div>{renderNumberButtons()}</div>
-          <div>{renderActionButtons()}</div>
-          <IonButton onClick={applyChanges}>Calculate</IonButton>
+          <div className={itemClass}>{renderNumberButtons()}</div>
+          <div className={itemClass}>{renderActionButtons()}</div>
+          <IonButton className={itemClass} onClick={applyChanges}>Calculate</IonButton>
         </div>
 
-        <IonButton expand="full" onClick={newNumber} className="bottom-button">
+        <IonButton expand="full" onClick={newNumber} className={`bottom-button showItem`}>
           New Number
         </IonButton>
       </IonContent>

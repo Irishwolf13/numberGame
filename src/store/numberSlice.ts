@@ -1,4 +1,3 @@
-// src/numberSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MyNumber } from '../interfaces/interface';
 
@@ -7,7 +6,7 @@ interface NumberState {
 }
 
 const initialState: NumberState = {
-    currentNumber: null,
+  currentNumber: null,
 };
 
 const numberSlice = createSlice({

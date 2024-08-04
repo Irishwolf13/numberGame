@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { setCurrentNumber } from '../../store/numberSlice';
 import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store/store'; 
 import './BouncingNumbers.css';
 
 interface BouncingNumbersProps {
   numbersArray: number[];
 }
 
-const unreachableNumbers = [76, 79, 86, 92, 94, 97, 98];
+const unreachableNumbers = [0, 76, 79, 86, 92, 94, 97, 98];
 
-// Generate random initial positions, velocities, and sizes for the numbers
 const generateNumbers = (numbers: number[]) => {
   const reachableNumbers = numbers.filter((num) => !unreachableNumbers.includes(num));
 
@@ -20,23 +20,27 @@ const generateNumbers = (numbers: number[]) => {
     y: Math.random() * 90 + 5,
     vx: (Math.random() - 0.5) * 2,
     vy: (Math.random() - 0.5) * 2,
-    size: Math.random() * 2 + 4, // size range between 4vh and 6vh
+    size: Math.random() * 2 + 4,
+    isStationary: false,
   }));
 };
 
 const BouncingNumbers: React.FC<BouncingNumbersProps> = ({ numbersArray }) => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const [numbers, setNumbers] = useState(generateNumbers(numbersArray));
-  const history = useHistory();
+  const [clickedId, setClickedId] = useState<number | null>(null);
+  const globalNumber = useSelector((state: RootState) => state.currentNumber.currentNumber?.number || null);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setNumbers((prevNumbers) => {
         const newNumbers = prevNumbers.map((num) => {
+          if (num.isStationary || num.id === clickedId) return num;
+
           let { x, y, vx, vy, size } = num;
           const radius = size / 2;
 
-          // Check boundaries with respect to the radius
           if (x - radius <= 0 || x + radius >= 100) vx = -vx;
           if (y - radius <= 0 || y + radius >= 100) vy = -vy;
 
@@ -49,9 +53,10 @@ const BouncingNumbers: React.FC<BouncingNumbersProps> = ({ numbersArray }) => {
           };
         });
 
-        // Check for collisions
         for (let i = 0; i < newNumbers.length; i++) {
           for (let j = i + 1; j < newNumbers.length; j++) {
+            if (newNumbers[i].isStationary || newNumbers[j].isStationary) continue;
+
             const dx = newNumbers[i].x - newNumbers[j].x;
             const dy = newNumbers[i].y - newNumbers[j].y;
             const distance = Math.sqrt(dx * dx + dy * dy);
@@ -67,7 +72,6 @@ const BouncingNumbers: React.FC<BouncingNumbersProps> = ({ numbersArray }) => {
               newNumbers[j].vx = speed_i * Math.cos(angle + Math.PI);
               newNumbers[j].vy = speed_i * Math.sin(angle + Math.PI);
 
-              // Separate overlap
               const overlap = (combinedRadius - distance) / 2;
               newNumbers[i].x += Math.cos(angle) * overlap;
               newNumbers[i].y += Math.sin(angle) * overlap;
@@ -79,30 +83,46 @@ const BouncingNumbers: React.FC<BouncingNumbersProps> = ({ numbersArray }) => {
 
         return newNumbers;
       });
-    }, 30);
+    }, 40);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [clickedId]);
+
+  useEffect(() => {
+    if (globalNumber !== null && numbers.some(num => num.id === globalNumber)) {
+      handleBallClick(globalNumber);
+    }
+  }, [globalNumber]);
 
   const handleBallClick = (id: number) => {
     console.log(`Number clicked: ${id}`);
     dispatch(setCurrentNumber({ id, number: id }));
-    history.push('/standardgame');
+    setClickedId(id);
+    setNumbers((prevNumbers) =>
+      prevNumbers.map((num) =>
+        num.id === id ? { ...num, isStationary: true } : num
+      )
+    );
   };
+
+  interface ExtendedCSSProperties extends React.CSSProperties {
+    '--size'?: string;
+  }
+
+  const coverClassName = globalNumber ? "cover showCover" : "cover hideCover";
 
   return (
     <div className='whiteBackground'>
+      <div className={coverClassName}></div>
       {numbers.map((num) => (
         <div
           key={num.id}
-          className='bouncingNumber'
+          className={`bouncingNumber ${num.id === clickedId ? 'centeredBall' : ''}`}
           style={{
+            '--size': `${num.size}vh`,
             top: `${num.y}%`,
-            left: `${num.x}%`,
-            width: `${num.size}vh`,
-            height: `${num.size}vh`,
-            fontSize: `${num.size / 2}vh`,
-          }}
+            left: `${num.x}%`
+          } as ExtendedCSSProperties}
           onClick={() => handleBallClick(num.id)}
         >
           {num.id}
