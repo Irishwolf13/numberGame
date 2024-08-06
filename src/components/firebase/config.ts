@@ -1,6 +1,7 @@
 // config.ts
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const VITE_DEV_API_KEY = import.meta.env.VITE_DEV_API_KEY;
 const VITE_DEV_AUTH_DOMAIN = import.meta.env.VITE_DEV_AUTH_DOMAIN;
@@ -20,5 +21,6 @@ const firebaseDevConfig = {
 
 const app = initializeApp(firebaseDevConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
-export { auth };
+export { auth, db };

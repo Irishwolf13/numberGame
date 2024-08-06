@@ -33,6 +33,10 @@ const BouncingNumbers: React.FC<BouncingNumbersProps> = ({ numbersArray }) => {
   const globalNumber = useSelector((state: RootState) => state.currentNumber.currentNumber?.number || null);
 
   useEffect(() => {
+    setNumbers(generateNumbers(numbersArray));
+  }, [numbersArray]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setNumbers((prevNumbers) => {
         const newNumbers = prevNumbers.map((num) => {
@@ -95,7 +99,7 @@ const BouncingNumbers: React.FC<BouncingNumbersProps> = ({ numbersArray }) => {
   }, [globalNumber]);
 
   const handleBallClick = (id: number) => {
-    console.log(`Number clicked: ${id}`);
+    // console.log(`Number clicked: ${id}`);
     dispatch(setCurrentNumber({ id, number: id }));
     setClickedId(id);
     setNumbers((prevNumbers) =>

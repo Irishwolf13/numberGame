@@ -1,42 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  IonBackButton,
-  IonButton,
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonPage,
-} from '@ionic/react';
-import './StandardGame.css';
+import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonPage } from '@ionic/react';
 import { RootState } from '../../store/store';
 import { setCurrentNumber } from '../../store/numberSlice';
+
 import BouncingNumbers from '../../components/BouncingNumbers/BouncingNumbers'; 
+import { addNumberToUser } from '../../components/firebase/firebaseController'; // Import the function
+import './StandardGame.css';
 
 const StandardGame: React.FC = () => {
   const dispatch = useDispatch();
   const globalNumber = useSelector(
     (state: RootState) => state.currentNumber.currentNumber?.number || null
   );
-  const alreadyReached = [1]; 
-  const [myNumbers, setMyNumbers] = useState([1, 2, 3, 4, 5]);
-  const [firstSelectedIdx, setFirstSelectedIdx] = useState<number | null>(null);
-  const [secondSelectedIdx, setSecondSelectedIdx] = useState<number | null>(null);
-  const [currentAction, setCurrentAction] = useState<string | null>(null);
-  const [randomNumber, setRandomNumber] = useState<number | null>(globalNumber);
+  const userInfo = useSelector((state: RootState) => state.user.user);
+
   const unreachableNumbers = [0, 76, 79, 86, 92, 94, 97, 98];
   const actions = ['+', '-', '/', 'x'];
+  const [myNumbers, setMyNumbers] = useState([1, 2, 3, 4, 5]);
+  const [currentAction, setCurrentAction] = useState<string | null>(null);
+  const [firstSelectedIdx, setFirstSelectedIdx] = useState<number | null>(null);
+  const [secondSelectedIdx, setSecondSelectedIdx] = useState<number | null>(null);
 
-  let numbersArray = Array.from({ length: 100 }, (_, i) => i + 1);
-  numbersArray = numbersArray.filter(
-    (num) => !unreachableNumbers.includes(num) && !alreadyReached.includes(num)
-  );
+  const [randomNumber, setRandomNumber] = useState<number | null>(globalNumber);
 
-  const goToStandardGame = () => {
-    const randomIndex = Math.floor(Math.random() * numbersArray.length);
-    const randomNumber = numbersArray[randomIndex];
-    dispatch(setCurrentNumber({ number: randomNumber }));
-  };
+  const [numbersArray, setNumbersArray] = useState<number[]>(() => {
+    const reachedNumbers = userInfo?.reachedNumbers.map(entry => entry.number);
+    let initialNumbersArray = Array.from({ length: 100 }, (_, i) => i + 1);
+    return initialNumbersArray.filter(
+      (num) => !unreachableNumbers.includes(num) && !reachedNumbers?.includes(num)
+    );
+  });
 
   useEffect(() => {
     setRandomNumber(globalNumber);
@@ -96,10 +90,8 @@ const StandardGame: React.FC = () => {
       }
 
       const newMyNumbers = [...myNumbers];
-
       newMyNumbers.splice(Math.max(firstSelectedIdx, secondSelectedIdx), 1);
       newMyNumbers.splice(Math.min(firstSelectedIdx, secondSelectedIdx), 1);
-
       newMyNumbers.push(result);
 
       setMyNumbers(newMyNumbers);
@@ -115,6 +107,19 @@ const StandardGame: React.FC = () => {
     setSecondSelectedIdx(null);
     setCurrentAction(null);
     generateRandomNumber();
+  };
+
+  const addNumber = async () => {
+    setRandomNumber(null);
+
+    dispatch(setCurrentNumber({ number: undefined }));
+    if (userInfo && userInfo.uid) {
+      if (globalNumber !== null) {
+        await addNumberToUser('users', userInfo.uid, globalNumber);
+        // Filter out the added number from the numbersArray
+        setNumbersArray(prevNumbers => prevNumbers.filter(num => num !== globalNumber));
+      }
+    }
   };
 
   const renderNumberButtons = () => {
@@ -165,6 +170,7 @@ const StandardGame: React.FC = () => {
       <IonHeader>
         <IonButtons>
           <IonBackButton></IonBackButton>
+          <IonButton onClick={addNumber}>Blow up Number</IonButton>
         </IonButtons>
       </IonHeader>
       <IonContent fullscreen>
