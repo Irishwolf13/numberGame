@@ -10,9 +10,7 @@ import './StandardGame.css';
 
 const StandardGame: React.FC = () => {
   const dispatch = useDispatch();
-  const globalNumber = useSelector(
-    (state: RootState) => state.currentNumber.currentNumber?.number || null
-  );
+  const globalNumber = useSelector((state: RootState) => state.currentNumber.currentNumber?.number || null);
   const userInfo = useSelector((state: RootState) => state.user.user);
 
   const unreachableNumbers = [0, 76, 79, 86, 92, 94, 97, 98];
@@ -21,29 +19,49 @@ const StandardGame: React.FC = () => {
   const [currentAction, setCurrentAction] = useState<string | null>(null);
   const [firstSelectedIdx, setFirstSelectedIdx] = useState<number | null>(null);
   const [secondSelectedIdx, setSecondSelectedIdx] = useState<number | null>(null);
-
   const [randomNumber, setRandomNumber] = useState<number | null>(globalNumber);
+  const itemClass = randomNumber ? 'showItem' : 'hiddenItem';
 
-  const [numbersArray, setNumbersArray] = useState<number[]>(() => {
-    const reachedNumbers = userInfo?.reachedNumbers.map(entry => entry.number);
-    let initialNumbersArray = Array.from({ length: 100 }, (_, i) => i + 1);
-    return initialNumbersArray.filter(
-      (num) => !unreachableNumbers.includes(num) && !reachedNumbers?.includes(num)
-    );
-  });
+  const [itemClass2, setItemClass2] = useState('');
+  const showNumberToGet = () => (
+    <div className={`circle centered ${itemClass2}`}>{randomNumber}</div>
+  );
 
   useEffect(() => {
     setRandomNumber(globalNumber);
   }, [globalNumber]);
 
-  const generateRandomNumber = () => {
-    let number;
-    do {
-      number = Math.floor(Math.random() * 101);
-    } while (unreachableNumbers.includes(number));
+  useEffect(() => {
+    if (randomNumber === null) {
+      generateRandomNumber();
+    }
+  }, []);
 
+  useEffect(() => {
+    // console.log(myNumbers)
+    if(myNumbers.length === 1) {
+      // console.log(randomNumber)
+      // console.log(myNumbers[0])
+      if (myNumbers[0] === randomNumber) {
+        console.log('You Win!')
+      }else {
+        console.log('You Lose!')
+      }
+    }
+  },[myNumbers])
+
+  const generateRandomNumber = () => {
+    const reachedNumbers = userInfo?.reachedNumbers?.map(obj => obj.number) || [];
+    let number;
+
+    do {number = Math.floor(Math.random() * 101);}
+    while (unreachableNumbers.includes(number) || reachedNumbers.includes(number));
+  
     dispatch(setCurrentNumber({ number }));
     setRandomNumber(number);
+    // console.log(number);
+    // console.log(userInfo);
+    // console.log(reachedNumbers);
   };
 
   const handleButtonClick = (num: number, index: number) => {
@@ -110,16 +128,22 @@ const StandardGame: React.FC = () => {
   };
 
   const addNumber = async () => {
-    setRandomNumber(null);
-
-    dispatch(setCurrentNumber({ number: undefined }));
+    setItemClass2('explosion');
+    
     if (userInfo && userInfo.uid) {
       if (globalNumber !== null) {
         await addNumberToUser('users', userInfo.uid, globalNumber);
-        // Filter out the added number from the numbersArray
-        setNumbersArray(prevNumbers => prevNumbers.filter(num => num !== globalNumber));
       }
     }
+    
+    // Reset the itemClass after animation (cleanup) and then call setRandomNumber(null)
+    setTimeout(() => {
+      setItemClass2('');
+      dispatch(setCurrentNumber({ number: undefined }));
+      setRandomNumber(null);
+      // You need to add something to pop up and tell the user they GOT THAT NUMBER
+      // Then you should let them eithe pick number or hit random number again...
+    }, 1000); // match the duration of the animation (1 second)
   };
 
   const renderNumberButtons = () => {
@@ -163,8 +187,6 @@ const StandardGame: React.FC = () => {
     return '';
   };
 
-  const itemClass = randomNumber ? 'showItem' : 'hiddenItem';
-
   return (
     <IonPage>
       <IonHeader>
@@ -174,8 +196,9 @@ const StandardGame: React.FC = () => {
         </IonButtons>
       </IonHeader>
       <IonContent fullscreen>
-        <BouncingNumbers numbersArray={numbersArray} />
+        {/* <BouncingNumbers numbersArray={numbersArray} setNumber={setNumber} /> */}
         <div className="centerMe">
+          {showNumberToGet()}
           <div className="circles-container-spacer"></div>
           <div className="circles-container">
             <div className={`circle ${itemClass}`}>

@@ -7,6 +7,7 @@ import './BouncingNumbers.css';
 
 interface BouncingNumbersProps {
   numbersArray: number[];
+  setNumber: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const unreachableNumbers = [0, 76, 79, 86, 92, 94, 97, 98];
@@ -25,7 +26,7 @@ const generateNumbers = (numbers: number[]) => {
   }));
 };
 
-const BouncingNumbers: React.FC<BouncingNumbersProps> = ({ numbersArray }) => {
+const BouncingNumbers: React.FC<BouncingNumbersProps> = ({ numbersArray, setNumber }) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [numbers, setNumbers] = useState(generateNumbers(numbersArray));
@@ -40,8 +41,6 @@ const BouncingNumbers: React.FC<BouncingNumbersProps> = ({ numbersArray }) => {
     const interval = setInterval(() => {
       setNumbers((prevNumbers) => {
         const newNumbers = prevNumbers.map((num) => {
-          if (num.isStationary || num.id === clickedId) return num;
-
           let { x, y, vx, vy, size } = num;
           const radius = size / 2;
 
@@ -59,8 +58,6 @@ const BouncingNumbers: React.FC<BouncingNumbersProps> = ({ numbersArray }) => {
 
         for (let i = 0; i < newNumbers.length; i++) {
           for (let j = i + 1; j < newNumbers.length; j++) {
-            if (newNumbers[i].isStationary || newNumbers[j].isStationary) continue;
-
             const dx = newNumbers[i].x - newNumbers[j].x;
             const dy = newNumbers[i].y - newNumbers[j].y;
             const distance = Math.sqrt(dx * dx + dy * dy);
@@ -99,14 +96,9 @@ const BouncingNumbers: React.FC<BouncingNumbersProps> = ({ numbersArray }) => {
   }, [globalNumber]);
 
   const handleBallClick = (id: number) => {
-    // console.log(`Number clicked: ${id}`);
     dispatch(setCurrentNumber({ id, number: id }));
     setClickedId(id);
-    setNumbers((prevNumbers) =>
-      prevNumbers.map((num) =>
-        num.id === id ? { ...num, isStationary: true } : num
-      )
-    );
+    setNumber(id);
   };
 
   interface ExtendedCSSProperties extends React.CSSProperties {
@@ -121,7 +113,7 @@ const BouncingNumbers: React.FC<BouncingNumbersProps> = ({ numbersArray }) => {
       {numbers.map((num) => (
         <div
           key={num.id}
-          className={`bouncingNumber ${num.id === clickedId ? 'centeredBall' : ''}`}
+          className='bouncingNumber'
           style={{
             '--size': `${num.size}vh`,
             top: `${num.y}%`,

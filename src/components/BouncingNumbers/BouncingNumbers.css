@@ -21,16 +21,6 @@
   font-size: calc(var(--size) / 2);
 }
 
-.centeredBall {
-  top: 10% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  transition: top 1s ease, left 1s ease, transform 1s ease !important;
-  width: 7vh;
-  height: 7vh;
-  z-index: 1000;
-}
-
 .cover {
   position: absolute;
   top: 0;

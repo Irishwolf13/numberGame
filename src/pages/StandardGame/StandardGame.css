@@ -23,6 +23,15 @@
     border: 1px solid #ccc;
 }
 
+.centered {
+    width: 70px;
+    height: 70px;
+    z-index: 199;
+    top: 12%;
+    position: absolute;
+    font-size: xx-large;
+}
+
 .hiddenItem {
     z-index: -10;
 }
@@ -57,3 +66,57 @@
     align-items: center;
     z-index: 100;
 }
+
+/* Explosions */
+
+.explosion {
+    animation: pulse-explode 0.5s linear forwards, shake 0.5s ease-in-out infinite;
+}
+
+@keyframes pulse-explode {
+    0% {
+      transform: scale(1);
+      background-color: yellow;
+      opacity: 1;
+      box-shadow: 0 0 10px yellow;
+    }
+    25% {
+      transform: scale(3);
+      background-color: orange;
+      opacity: 0.75;
+      box-shadow: 0 0 20px orange;
+    }
+    50% {
+      transform: scale(5);
+      background-color: red;
+      opacity: 0.5;
+      box-shadow: 0 0 30px red;
+    }
+    75% {
+      transform: scale(7);
+      background-color: pink;
+      opacity: 0.25;
+      box-shadow: 0 0 40px pink;
+    }
+    100% {
+      transform: scale(9);
+      background-color: purple;
+      opacity: 0;
+      box-shadow: 0 0 50px purple;
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0) translateY(0); } /* Center */
+    8.33% { transform: translateX(-20px) translateY(15px); } /* Random position */
+    16.66% { transform: translateX(25px) translateY(-10px); } /* Random position */
+    25% { transform: translateX(-30px) translateY(-5px); } /* Random position */
+    33.33% { transform: translateX(10px) translateY(25px); } /* Random position */
+    41.66% { transform: translateX(-25px) translateY(-20px); } /* Random position */
+    50% { transform: translateX(20px) translateY(20px); } /* Random position */
+    58.33% { transform: translateX(-15px) translateY(-10px); } /* Random position */
+    66.66% { transform: translateX(30px) translateY(-15px); } /* Random position */
+    75% { transform: translateX(-35px) translateY(20px); } /* Random position */
+    83.33% { transform: translateX(15px) translateY(-25px); } /* Random position */
+    91.66% { transform: translateX(-10px) translateY(30px); } /* Random position */
+  }
