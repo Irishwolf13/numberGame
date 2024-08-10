@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonPage } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonInput, IonItem, IonModal, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { RootState } from '../../store/store';
 import { setCurrentNumber } from '../../store/numberSlice';
-
-import BouncingNumbers from '../../components/BouncingNumbers/BouncingNumbers'; 
 import { addNumberToUser } from '../../components/firebase/firebaseController'; // Import the function
 import './StandardGame.css';
+import MyModal from '../../components/Modal/Modal';
 
 const StandardGame: React.FC = () => {
   const dispatch = useDispatch();
@@ -38,14 +37,11 @@ const StandardGame: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // console.log(myNumbers)
     if(myNumbers.length === 1) {
-      // console.log(randomNumber)
-      // console.log(myNumbers[0])
       if (myNumbers[0] === randomNumber) {
-        console.log('You Win!')
+        youWin()
       }else {
-        console.log('You Lose!')
+        youLose()
       }
     }
   },[myNumbers])
@@ -59,12 +55,10 @@ const StandardGame: React.FC = () => {
   
     dispatch(setCurrentNumber({ number }));
     setRandomNumber(number);
-    // console.log(number);
-    // console.log(userInfo);
-    // console.log(reachedNumbers);
+    setGotIt(false)
   };
 
-  const handleButtonClick = (num: number, index: number) => {
+  const handleNumberButtonClicked = (num: number, index: number) => {
     if (index === firstSelectedIdx) {
       setFirstSelectedIdx(null);
     } else if (index === secondSelectedIdx) {
@@ -119,38 +113,41 @@ const StandardGame: React.FC = () => {
     }
   };
 
-  const newNumber = () => {
+  const resetNumbers = () => {
     setMyNumbers([1, 2, 3, 4, 5]);
     setFirstSelectedIdx(null);
     setSecondSelectedIdx(null);
     setCurrentAction(null);
-    generateRandomNumber();
   };
 
-  const addNumber = async () => {
-    setItemClass2('explosion');
+  const youWin = async () => {
+    await explosion();  
+    setGotIt(true);
+    openFinishModal();
     
     if (userInfo && userInfo.uid) {
       if (globalNumber !== null) {
         await addNumberToUser('users', userInfo.uid, globalNumber);
       }
     }
-    
-    // Reset the itemClass after animation (cleanup) and then call setRandomNumber(null)
-    setTimeout(() => {
-      setItemClass2('');
-      dispatch(setCurrentNumber({ number: undefined }));
-      setRandomNumber(null);
-      // You need to add something to pop up and tell the user they GOT THAT NUMBER
-      // Then you should let them eithe pick number or hit random number again...
-    }, 1000); // match the duration of the animation (1 second)
   };
+  const youLose = async () => {
+    setGotIt(false)
+    openFinishModal()
+  }
+  
+  const explosion = async () => {
+    const delay = (ms:any) => new Promise(resolve => setTimeout(resolve, ms));
+    setItemClass2('explosion');
+    await delay(500);
+  };
+
 
   const renderNumberButtons = () => {
     return myNumbers.map((num, index) => (
       <IonButton
         key={`${num}-${index}`}
-        onClick={() => handleButtonClick(num, index)}
+        onClick={() => handleNumberButtonClicked(num, index)}
         color={
           index === firstSelectedIdx || index === secondSelectedIdx
             ? 'success'
@@ -187,15 +184,52 @@ const StandardGame: React.FC = () => {
     return '';
   };
 
+  // ************************* MODAL STUFF *************************
+  const [showFinishModal, setShowFinishModal] = useState(false);
+  const [gotIt, setGotIt] = useState(false);
+
+  // This is called when Modal Closes
+  const resetWithNewNumber = () => {
+    dispatch(setCurrentNumber({ number: undefined }));
+    setRandomNumber(null);
+    setGotIt(false)
+    generateRandomNumber()
+    resetNumbers();
+    setItemClass2('');
+    setShowFinishModal(false);
+  };
+
+  const resetWithOldNumber = () => {
+    setGotIt(false)
+    resetNumbers();
+    setItemClass2('');
+    setShowFinishModal(false);
+  }
+
+  const openFinishModal = () => {
+    setShowFinishModal(true);
+  };
+
   return (
     <IonPage>
       <IonHeader>
-        <IonButtons>
+      <IonToolbar>
+        <IonButtons  slot="start">
           <IonBackButton></IonBackButton>
-          <IonButton onClick={addNumber}>Blow up Number</IonButton>
         </IonButtons>
+        <IonButtons slot="end">
+          <IonButton onClick={resetWithOldNumber}>Reset</IonButton>
+        </IonButtons>
+      </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+      <MyModal 
+        showModal={showFinishModal}
+        getNewRandomNumber={resetWithNewNumber}
+        gotIt={gotIt} number={randomNumber ?? 0}
+        resetWithOldNumber={resetWithOldNumber}
+        />
+        
         {/* <BouncingNumbers numbersArray={numbersArray} setNumber={setNumber} /> */}
         <div className="centerMe">
           {showNumberToGet()}
@@ -220,7 +254,7 @@ const StandardGame: React.FC = () => {
 
         <IonButton
           expand="full"
-          onClick={newNumber}
+          onClick={() => {resetNumbers(); generateRandomNumber();}}
           className={`bottom-button showItem`}
         >
           New Number

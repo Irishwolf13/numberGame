@@ -119,4 +119,5 @@
     75% { transform: translateX(-35px) translateY(20px); } /* Random position */
     83.33% { transform: translateX(15px) translateY(-25px); } /* Random position */
     91.66% { transform: translateX(-10px) translateY(30px); } /* Random position */
-  }
+}
+
